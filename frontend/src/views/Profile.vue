@@ -66,6 +66,7 @@
                 >
                   {{ tag }}
                 </a-tag>
+                <span v-if="form.default_preferences.length === 0" class="empty-tip">尚未选择偏好</span>
               </div>
 
               <a-input-search
@@ -200,6 +201,10 @@ onMounted(load)
   border: 1px solid #e5eaf1;
   border-radius: 6px;
   background: #f9fbfd;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .selected-tags :deep(.ant-tag) {
@@ -209,5 +214,9 @@ onMounted(load)
   background: #eef7f6;
   border-color: #cde7e3;
   color: #0f766e;
+}
+
+.empty-tip {
+  color: #667085;
 }
 </style>
