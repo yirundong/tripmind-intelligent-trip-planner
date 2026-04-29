@@ -1,0 +1,45 @@
+# Runtime logs and local process files
+.run/
+logs/
+*.log
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Local databases and generated data
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+node_modules/
+dist/
+
+# Editor and OS files
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
