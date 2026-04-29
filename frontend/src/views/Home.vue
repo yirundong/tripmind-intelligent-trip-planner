@@ -61,7 +61,7 @@
             </div>
 
             <a-row :gutter="[20, 16]">
-              <a-col :xs="24" :lg="8">
+              <a-col :xs="24" :lg="12">
                 <a-form-item name="transportation">
                   <template #label>
                     <span class="form-label">交通方式</span>
@@ -74,7 +74,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :xs="24" :lg="8">
+              <a-col :xs="24" :lg="12">
                 <a-form-item name="accommodation">
                   <template #label>
                     <span class="form-label">住宿偏好</span>
@@ -87,20 +87,42 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :xs="24" :lg="8">
+              <a-col :xs="24">
                 <a-form-item name="preferences">
                   <template #label>
                     <span class="form-label">旅行偏好</span>
                   </template>
-                  <div class="preference-tags">
-                    <a-checkable-tag
-                      v-for="tag in availablePreferences"
-                      :key="tag"
-                      :checked="formData.preferences.includes(tag)"
-                      @change="(checked: boolean) => togglePreference(tag, checked)"
-                    >
-                      {{ tag }}
-                    </a-checkable-tag>
+                  <div class="preference-editor">
+                    <div class="preference-tags">
+                      <a-checkable-tag
+                        v-for="tag in availablePreferences"
+                        :key="tag"
+                        :checked="formData.preferences.includes(tag)"
+                        @change="(checked: boolean) => togglePreference(tag, checked)"
+                      >
+                        {{ tag }}
+                      </a-checkable-tag>
+                    </div>
+
+                    <div class="selected-tags">
+                      <a-tag
+                        v-for="tag in formData.preferences"
+                        :key="tag"
+                        closable
+                        @close.prevent="removePreference(tag)"
+                      >
+                        {{ tag }}
+                      </a-tag>
+                      <span v-if="formData.preferences.length === 0" class="empty-tip">尚未选择偏好</span>
+                    </div>
+
+                    <a-input-search
+                      v-model:value="customPreference"
+                      placeholder="输入自定义偏好，例如：亲子、摄影、Citywalk"
+                      enter-button="添加"
+                      style="max-width: 520px"
+                      @search="addCustomPreference"
+                    />
                   </div>
                 </a-form-item>
               </a-col>
@@ -232,9 +254,30 @@ const router = useRouter()
 const loading = ref(false)
 const loadingProgress = ref(0)
 const loadingStatus = ref('')
+const customPreference = ref('')
 const storedUser = getStoredUser()
-const basePreferences = ['历史文化', '自然风光', '美食', '购物', '艺术', '休闲']
-const availablePreferences = Array.from(new Set([...basePreferences, ...(storedUser?.default_preferences || [])]))
+const suggestedPreferences = [
+  '历史文化',
+  '自然风光',
+  '美食',
+  '购物',
+  '艺术',
+  '休闲',
+  '亲子',
+  '摄影',
+  'Citywalk',
+  '博物馆',
+  '夜景',
+  '小众路线',
+  '无障碍',
+  '慢节奏',
+  '露营',
+  '海滨',
+  '咖啡馆',
+  '演出',
+  '温泉',
+  '研学'
+]
 const workflowSteps = [
   { key: 'request', title: '需求解析', desc: '校验目的地、日期和旅行偏好', doneAt: 18 },
   { key: 'attractions', title: '景点搜索', desc: '调用高德 POI 检索候选景点', doneAt: 32 },
@@ -261,12 +304,38 @@ const formData = reactive<TripFormState>({
   free_text_input: ''
 })
 
-const togglePreference = (tag: string, checked: boolean) => {
-  if (checked && !formData.preferences.includes(tag)) {
-    formData.preferences.push(tag)
+const availablePreferences = computed(() => {
+  return Array.from(new Set([
+    ...suggestedPreferences,
+    ...(storedUser?.default_preferences || []),
+    ...formData.preferences
+  ]))
+})
+
+const addPreference = (tag: string) => {
+  const value = tag.trim()
+  if (!value) return
+  if (formData.preferences.includes(value)) {
+    message.info('这个偏好已经添加过了')
+    return
   }
-  if (!checked) {
-    formData.preferences = formData.preferences.filter(item => item !== tag)
+  formData.preferences.push(value)
+}
+
+const addCustomPreference = () => {
+  addPreference(customPreference.value)
+  customPreference.value = ''
+}
+
+const removePreference = (tag: string) => {
+  formData.preferences = formData.preferences.filter(item => item !== tag)
+}
+
+const togglePreference = (tag: string, checked: boolean) => {
+  if (checked) {
+    addPreference(tag)
+  } else {
+    removePreference(tag)
   }
 }
 
@@ -380,7 +449,12 @@ const handleSubmit = async () => {
   font-size: 14px;
 }
 
-/* 偏好标签 */
+.preference-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .preference-tags {
   display: flex;
   flex-wrap: wrap;
@@ -392,6 +466,31 @@ const handleSubmit = async () => {
   padding: 6px 13px;
   border-radius: 4px;
   border-color: #d9e7e4;
+}
+
+.selected-tags {
+  min-height: 40px;
+  padding: 10px;
+  border: 1px solid #e5eaf1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.selected-tags,
+.profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.selected-tags :deep(.ant-tag) {
+  margin-inline-end: 0;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #eef7f6;
+  border-color: #cde7e3;
+  color: #0f766e;
 }
 
 /* 提交按钮 */
