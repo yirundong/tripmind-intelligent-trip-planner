@@ -57,7 +57,7 @@ intelligent-trip-planner/
 ## 环境要求
 
 - Python 3.10+
-- Node.js 16+
+- Node.js 18+
 - PowerShell 5+
 - 可访问 LLM 服务和高德开放平台的网络环境
 
@@ -224,8 +224,9 @@ npm run dev
 仓库根目录已经包含 `netlify.toml`，Netlify 会进入 `frontend` 目录执行构建，并发布 `frontend/dist`。
 
 ```bash
-npx netlify-cli deploy --build
-npx netlify-cli deploy --build --prod
+npm --prefix frontend ci
+npm --prefix frontend run build
+npx netlify deploy --prod --no-build --dir=frontend/dist
 ```
 
 Netlify 适合部署 Vue 前端。FastAPI 后端需要单独部署到 Render、Railway、服务器或云函数平台，然后在 Netlify 站点环境变量中配置：
@@ -252,7 +253,7 @@ flowchart LR
   H --> F
 ```
 
-结果页会展示 Agent 协作报告，规划页会展示实时任务阶段，方便答辩时说明系统不是简单文本生成。
+规划页会展示实时任务阶段，后台会沉淀任务日志和成功率统计，方便答辩时说明系统不是简单文本生成。
 
 ## 答辩亮点
 
@@ -275,7 +276,7 @@ flowchart LR
    检查 `LLM_API_KEY`、`LLM_BASE_URL`、`LLM_MODEL_ID` 和 `AMAP_API_KEY` 是否正确。
 
 3. 普通用户看不到管理后台  
-   这是正常权限控制。首个注册用户会自动成为管理员。
+   这是正常权限控制。管理员只由 `DEFAULT_ADMIN_EMAIL`、`DEFAULT_ADMIN_USERNAME` 和 `DEFAULT_ADMIN_PASSWORD` 初始化，普通注册用户不会自动成为管理员。
 
 4. 端口被占用  
    默认脚本会清理 `8000` 和 `5173` 的旧监听进程；不希望清理时使用 `-NoPortCleanup`。

@@ -107,12 +107,15 @@ const router = createRouter({
 router.beforeEach((to) => {
   const token = getToken()
   const user = getStoredUser()
+
   if (to.meta.requiresAuth && !token) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
   if (to.meta.requiresAdmin && !user?.is_admin) {
     return '/403'
   }
+
+  // 管理员只进入后台，普通前台页面保持面向旅行用户。
   if (to.meta.publicOnly && token) {
     return user?.is_admin ? '/admin' : '/dashboard'
   }

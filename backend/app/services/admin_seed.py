@@ -30,8 +30,9 @@ def _free_default_username(db, email: str, username: str) -> None:
 def seed_default_admin() -> None:
     """根据环境变量创建或修正默认管理员账号。
 
-    该逻辑只在启动时运行一次：如果邮箱已存在，只确保它拥有管理员权限；
+    如果邮箱已存在，会修正用户名、管理员权限和启用状态；
     如果邮箱不存在，则创建一个新的管理员。密码只在首次创建时写入，避免覆盖用户后续修改。
+    同时会把其他管理员收敛为普通用户，保持“内置唯一管理员”的权限模型。
     """
     settings = get_settings()
     email = settings.default_admin_email.strip().lower()
