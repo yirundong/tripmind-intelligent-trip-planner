@@ -9,10 +9,14 @@ from .config import get_settings
 settings = get_settings()
 
 connect_args = {}
+engine_options = {"pool_pre_ping": True}
 if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
+else:
+    # MySQL 连接长时间空闲后可能被服务端断开，回收连接可以减少演示时的偶发断连。
+    engine_options["pool_recycle"] = 3600
 
-engine = create_engine(settings.database_url, connect_args=connect_args)
+engine = create_engine(settings.database_url, connect_args=connect_args, **engine_options)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

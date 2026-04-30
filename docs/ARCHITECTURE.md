@@ -9,7 +9,7 @@ flowchart TB
   U["用户/管理员"] --> F["Vue3 + TypeScript 前端"]
   F --> A["FastAPI REST API"]
   A --> Auth["JWT 认证与权限控制"]
-  A --> DB["SQLite 数据库"]
+  A --> DB["MySQL 数据库"]
   A --> Task["异步任务执行器"]
   Task --> G["LangGraph 多 Agent 工作流"]
   G --> LLM["LangChain / LLM 服务"]
@@ -146,7 +146,7 @@ erDiagram
 
 ## 7. 后续可扩展方向
 
-- 将 SQLite 切换为 MySQL 或 PostgreSQL，适合多人部署和并发使用。
+- 将 ORM 初始化升级为 Alembic 迁移脚本，便于后续维护表结构版本。
 - 将线程池任务升级为 Celery/RQ 等任务队列，适合正式生产环境。
 - 将轮询升级为 SSE 或 WebSocket，实时推送 Agent 运行进度。
 - 增加向量检索，利用历史对话、收藏和用户偏好做更强个性化推荐。

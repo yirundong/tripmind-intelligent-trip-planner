@@ -19,7 +19,7 @@ TripMind 是一个面向毕业设计和本地演示的智能旅行规划 Web 系
 | 层级 | 技术 |
 | --- | --- |
 | 前端 | Vue3、TypeScript、Vite、Ant Design Vue、Axios、AMap JS API |
-| 后端 | FastAPI、Pydantic、SQLAlchemy、SQLite、JWT |
+| 后端 | FastAPI、Pydantic、SQLAlchemy、MySQL、JWT |
 | AI 编排 | LangGraph、LangChain、OpenAI 兼容模型接口 |
 | 外部服务 | 高德地图 REST API、Unsplash 图片服务 |
 | 导出 | html2canvas、jsPDF |
@@ -50,6 +50,8 @@ intelligent-trip-planner/
 │   └── .env.example
 ├── docs/
 │   └── ARCHITECTURE.md          # 架构图、时序图、ER 图
+├── scripts/
+│   └── init_mysql.sql           # MySQL 建库和授权脚本
 ├── start-dev.ps1                # Windows 一键启动脚本
 └── README.md
 ```
@@ -58,6 +60,7 @@ intelligent-trip-planner/
 
 - Python 3.10+
 - Node.js 18+
+- MySQL 8.0+
 - PowerShell 5+
 - 可访问 LLM 服务和高德开放平台的网络环境
 
@@ -79,6 +82,7 @@ LLM_BASE_URL
 AMAP_API_KEY
 UNSPLASH_ACCESS_KEY
 UNSPLASH_SECRET_KEY
+DATABASE_URL
 DEFAULT_ADMIN_EMAIL
 DEFAULT_ADMIN_USERNAME
 DEFAULT_ADMIN_PASSWORD
@@ -105,6 +109,20 @@ DEFAULT_ADMIN_PASSWORD=ChangeMe123456
 普通用户注册不会获得管理员权限。系统只保留环境变量中配置的内置管理员账号，其他账号均作为普通用户管理；后台可查看用户并停用异常账号，但不提供新增管理员入口。
 
 ## 一键启动
+
+首次运行前先创建 MySQL 数据库。使用 MySQL root 账号执行：
+
+```powershell
+mysql -u root -p < scripts\init_mysql.sql
+```
+
+默认连接地址为：
+
+```text
+mysql+pymysql://tripmind:tripmind123@localhost:3306/tripmind?charset=utf8mb4
+```
+
+如果你修改了数据库用户名、密码或库名，需要同步修改 `backend/.env` 中的 `DATABASE_URL`。
 
 在项目根目录运行：
 
@@ -206,7 +224,17 @@ npm run dev
 
 ## 数据库
 
-默认数据库为 SQLite，文件位于 `backend/trip_planner.db`。该文件是运行时数据，不建议提交，也不要随意删除演示数据。
+默认数据库为 MySQL，后端通过 SQLAlchemy ORM 自动创建业务表。首次运行前需要先创建数据库和授权用户：
+
+```powershell
+mysql -u root -p < scripts\init_mysql.sql
+```
+
+后端连接配置位于 `backend/.env`：
+
+```text
+DATABASE_URL=mysql+pymysql://tripmind:tripmind123@localhost:3306/tripmind?charset=utf8mb4
+```
 
 核心表：
 
@@ -217,11 +245,9 @@ npm run dev
 | `favorite_places` | 用户收藏地点 |
 | `trip_plan_tasks` | 异步任务状态、阶段、进度和错误信息 |
 
-如果未来部署到多人长期使用环境，可以迁移到 MySQL 或 PostgreSQL。毕业设计演示阶段 SQLite 已能体现持久化和管理后台能力。
-
 ## 演示方式
 
-当前稳定版本推荐本地演示：在项目根目录执行 `.\start-dev.ps1`，同时启动 FastAPI 后端和 Vue 前端。这样可以直接使用本地 SQLite、LLM Key 和高德 Key，最适合毕业设计答辩。
+当前稳定版本推荐本地演示：启动 MySQL 后，在项目根目录执行 `.\start-dev.ps1`，同时启动 FastAPI 后端和 Vue 前端。这样可以直接使用本地数据库、LLM Key 和高德 Key，最适合毕业设计答辩。
 
 如果后续需要给其他电脑长期访问，应同时部署前端和后端，并把 `frontend/.env` 中的 `VITE_API_BASE_URL` 改成后端公网地址。只部署前端无法完成登录、规划、收藏和后台管理等功能。
 

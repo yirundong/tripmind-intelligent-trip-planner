@@ -1,28 +1,29 @@
-# Agent工作流框架
+# Agent workflow
 langgraph==1.1.6
 langchain-core==1.3.2
 langchain-openai==1.2.1
 
-# FastAPI和相关依赖
+# FastAPI and core backend
 fastapi==0.136.1
 uvicorn[standard]==0.44.0
 pydantic==2.11.10
 pydantic-settings==2.10.1
 sqlalchemy==2.0.49
+PyMySQL==1.1.2
 
-# HTTP客户端
+# HTTP clients
 httpx==0.28.1
 aiohttp==3.10.5
 
-# 环境变量管理
+# Environment variables
 python-dotenv==1.1.1
 
-# CORS支持
+# Form and CORS helpers
 python-multipart==0.0.26
 
-# 日志
+# Logging
 loguru==0.7.3
 
-# 其他工具
+# Utilities
 python-dateutil==2.9.0.post0
 huggingface_hub==1.10.1
