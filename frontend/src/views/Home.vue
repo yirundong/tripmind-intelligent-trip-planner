@@ -75,7 +75,7 @@
             </div>
 
             <a-row :gutter="[20, 16]">
-              <a-col :xs="24" :lg="12">
+              <a-col :xs="24" :lg="8">
                 <a-form-item name="transportation">
                   <template #label>
                     <span class="form-label">交通方式</span>
@@ -88,7 +88,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :xs="24" :lg="12">
+              <a-col :xs="24" :lg="8">
                 <a-form-item name="accommodation">
                   <template #label>
                     <span class="form-label">住宿偏好</span>
@@ -99,6 +99,23 @@
                     <a-select-option value="豪华酒店">豪华酒店</a-select-option>
                     <a-select-option value="民宿">民宿</a-select-option>
                   </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :xs="24" :lg="8">
+                <a-form-item name="attractions_per_day">
+                  <template #label>
+                    <span class="form-label">每日景点数</span>
+                  </template>
+                  <a-radio-group
+                    v-model:value="formData.attractions_per_day"
+                    button-style="solid"
+                    class="attraction-count-group"
+                  >
+                    <a-radio-button v-for="count in attractionCountOptions" :key="count" :value="count">
+                      {{ count }}个
+                    </a-radio-button>
+                  </a-radio-group>
+                  <div class="field-hint">Agent 会按这个数量优先安排每日停留点</div>
                 </a-form-item>
               </a-col>
               <a-col :xs="24">
@@ -261,6 +278,7 @@ const suggestedPreferences = [
   '温泉',
   '研学'
 ]
+const attractionCountOptions = [1, 2, 3, 4, 5]
 const workflowSteps = [
   { key: 'request', title: '需求解析', desc: '校验目的地、日期和旅行偏好', doneAt: 18 },
   { key: 'attractions', title: '景点搜索', desc: '调用高德 POI 检索候选景点', doneAt: 32 },
@@ -281,6 +299,7 @@ const formData = reactive<TripFormState>({
   start_date: null,
   end_date: null,
   travel_days: 1,
+  attractions_per_day: 3,
   transportation: storedUser?.default_transportation || '公共交通',
   accommodation: storedUser?.default_accommodation || '经济型酒店',
   preferences: storedUser?.default_preferences || [],
@@ -445,6 +464,7 @@ const handleSubmit = async () => {
       start_date: formData.start_date.format('YYYY-MM-DD'),
       end_date: formData.end_date.format('YYYY-MM-DD'),
       travel_days: formData.travel_days,
+      attractions_per_day: formData.attractions_per_day,
       transportation: formData.transportation,
       accommodation: formData.accommodation,
       preferences: formData.preferences,
@@ -521,6 +541,23 @@ onMounted(applyFavoritePlanningContext)
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.attraction-count-group {
+  display: flex;
+  width: 100%;
+}
+
+.attraction-count-group :deep(.ant-radio-button-wrapper) {
+  flex: 1;
+  text-align: center;
+}
+
+.field-hint {
+  margin-top: 8px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .preference-tags {

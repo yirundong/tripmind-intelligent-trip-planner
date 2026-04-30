@@ -13,6 +13,7 @@ class TripRequest(BaseModel):
     start_date: str = Field(..., description="开始日期 YYYY-MM-DD", example="2025-06-01")
     end_date: str = Field(..., description="结束日期 YYYY-MM-DD", example="2025-06-03")
     travel_days: int = Field(..., description="旅行天数", ge=1, le=30, example=3)
+    attractions_per_day: int = Field(default=3, description="每天期望安排的景点数量", ge=1, le=5, example=3)
     transportation: str = Field(..., description="交通方式", example="公共交通")
     accommodation: str = Field(..., description="住宿偏好", example="经济型酒店")
     preferences: List[str] = Field(default=[], description="旅行偏好标签", example=["历史文化", "美食"])
@@ -25,6 +26,7 @@ class TripRequest(BaseModel):
                 "start_date": "2025-06-01",
                 "end_date": "2025-06-03",
                 "travel_days": 3,
+                "attractions_per_day": 3,
                 "transportation": "公共交通",
                 "accommodation": "经济型酒店",
                 "preferences": ["历史文化", "美食"],

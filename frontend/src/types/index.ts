@@ -81,6 +81,7 @@ export interface TripFormData {
   start_date: string
   end_date: string
   travel_days: number
+  attractions_per_day: number
   transportation: string
   accommodation: string
   preferences: string[]
