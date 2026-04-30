@@ -65,7 +65,11 @@ const isAuthPage = computed(() => route.path === '/login' || route.path === '/re
 const isAdminPage = computed(() => route.path.startsWith('/admin'))
 const userName = computed(() => {
   route.fullPath
-  return getStoredUser()?.username || '旅行者'
+  const user = getStoredUser()
+  if (user?.is_admin) {
+    return '系统管理员'
+  }
+  return user?.username || '旅行者'
 })
 const isAdmin = computed(() => {
   route.fullPath

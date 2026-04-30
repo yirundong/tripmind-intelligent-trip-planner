@@ -19,6 +19,14 @@ def _available_username(db, preferred: str) -> str:
     return username
 
 
+def _free_default_username(db, email: str, username: str) -> None:
+    """确保默认管理员可以使用固定用户名。"""
+    holder = db.query(User).filter(User.email != email, User.username == username).first()
+    if holder:
+        holder.username = _available_username(db, f"{username}用户")
+        db.flush()
+
+
 def seed_default_admin() -> None:
     """根据环境变量创建或修正默认管理员账号。
 
@@ -45,6 +53,10 @@ def seed_default_admin() -> None:
         user = db.query(User).filter(User.email == email).first()
         if user:
             changed = False
+            if user.username != username:
+                _free_default_username(db, email, username)
+                user.username = username
+                changed = True
             if not user.is_admin:
                 user.is_admin = True
                 changed = True
@@ -66,9 +78,10 @@ def seed_default_admin() -> None:
                 print(f"✅ 已收敛管理员账号数量，仅保留默认管理员: {email}")
             return
 
+        _free_default_username(db, email, username)
         user = User(
             email=email,
-            username=_available_username(db, username),
+            username=username,
             hashed_password=hash_password(password),
             is_active=True,
             is_admin=True,

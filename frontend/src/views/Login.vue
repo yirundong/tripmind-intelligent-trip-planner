@@ -58,9 +58,10 @@ const form = reactive({
 const submit = async () => {
   loading.value = true
   try {
-    await loginUser(form)
+    const session = await loginUser(form)
     message.success('登录成功')
-    router.push((route.query.redirect as string) || '/dashboard')
+    const redirect = (route.query.redirect as string) || (session.user.is_admin ? '/admin' : '/dashboard')
+    router.push(session.user.is_admin ? '/admin' : redirect)
   } catch (error: any) {
     message.error(error.response?.data?.detail || error.message || '登录失败')
   } finally {

@@ -106,14 +106,18 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const token = getToken()
+  const user = getStoredUser()
   if (to.meta.requiresAuth && !token) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
-  if (to.meta.requiresAdmin && !getStoredUser()?.is_admin) {
+  if (to.meta.requiresAdmin && !user?.is_admin) {
     return '/403'
   }
   if (to.meta.publicOnly && token) {
-    return '/dashboard'
+    return user?.is_admin ? '/admin' : '/dashboard'
+  }
+  if (token && user?.is_admin && to.path !== '/admin') {
+    return '/admin'
   }
 })
 
