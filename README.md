@@ -219,23 +219,11 @@ npm run dev
 
 如果未来部署到多人长期使用环境，可以迁移到 MySQL 或 PostgreSQL。毕业设计演示阶段 SQLite 已能体现持久化和管理后台能力。
 
-## Netlify 部署
+## 演示方式
 
-仓库根目录已经包含 `netlify.toml`，Netlify 会进入 `frontend` 目录执行构建，并发布 `frontend/dist`。
+当前稳定版本推荐本地演示：在项目根目录执行 `.\start-dev.ps1`，同时启动 FastAPI 后端和 Vue 前端。这样可以直接使用本地 SQLite、LLM Key 和高德 Key，最适合毕业设计答辩。
 
-```bash
-npm --prefix frontend ci
-npm --prefix frontend run build
-npx netlify deploy --prod --no-build --dir=frontend/dist
-```
-
-Netlify 适合部署 Vue 前端。FastAPI 后端需要单独部署到 Render、Railway、服务器或云函数平台，然后在 Netlify 站点环境变量中配置：
-
-```text
-VITE_API_BASE_URL=https://your-backend.example.com
-VITE_AMAP_WEB_JS_KEY=你的高德Web端Key
-VITE_AMAP_SECURITY_JS_CODE=你的高德安全密钥
-```
+如果后续需要给其他电脑长期访问，应同时部署前端和后端，并把 `frontend/.env` 中的 `VITE_API_BASE_URL` 改成后端公网地址。只部署前端无法完成登录、规划、收藏和后台管理等功能。
 
 ## 多 Agent 流程
 
