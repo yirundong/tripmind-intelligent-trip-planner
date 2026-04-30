@@ -197,50 +197,6 @@
         </a-form>
       </a-card>
 
-      <aside class="planner-aside">
-        <a-card title="用户画像" :bordered="false">
-          <div class="profile-stack">
-            <div class="profile-row">
-              <span>默认城市</span>
-              <strong>{{ storedUser?.default_city || '未设置' }}</strong>
-            </div>
-            <div class="profile-row">
-              <span>交通方式</span>
-              <strong>{{ storedUser?.default_transportation || formData.transportation }}</strong>
-            </div>
-            <div class="profile-row">
-              <span>住宿偏好</span>
-              <strong>{{ storedUser?.default_accommodation || formData.accommodation }}</strong>
-            </div>
-            <div class="profile-tags">
-              <a-tag v-for="tag in formData.preferences" :key="tag">{{ tag }}</a-tag>
-              <span v-if="formData.preferences.length === 0" class="empty-tip">尚未选择偏好</span>
-            </div>
-          </div>
-        </a-card>
-
-        <a-card title="Agent 协作流程" :bordered="false">
-          <div class="aside-workflow">
-            <div v-for="(step, index) in workflowSteps" :key="step.key" class="aside-step">
-              <span class="aside-index">{{ index + 1 }}</span>
-              <div>
-                <strong>{{ step.title }}</strong>
-                <p>{{ step.desc }}</p>
-              </div>
-            </div>
-          </div>
-        </a-card>
-
-        <a-card title="生成后会沉淀的数据" :bordered="false">
-          <div class="data-list">
-            <span>结构化行程</span>
-            <span>预算明细</span>
-            <span>天气信息</span>
-            <span>地图坐标</span>
-            <span>任务日志</span>
-          </div>
-        </a-card>
-      </aside>
     </div>
   </div>
 </template>
@@ -588,8 +544,7 @@ onMounted(applyFavoritePlanningContext)
   background: #ffffff;
 }
 
-.selected-tags,
-.profile-tags {
+.selected-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -719,17 +674,7 @@ onMounted(applyFavoritePlanningContext)
 }
 
 .planner-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 20px;
-  align-items: start;
-}
-
-.planner-aside {
-  display: grid;
-  gap: 16px;
-  position: sticky;
-  top: 84px;
+  max-width: 980px;
 }
 
 .form-section,
@@ -829,86 +774,8 @@ onMounted(applyFavoritePlanningContext)
   border-color: #cde7e3;
 }
 
-.profile-stack {
-  display: grid;
-  gap: 12px;
-}
-
-.profile-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e5eaf1;
-}
-
-.profile-row span,
 .empty-tip {
   color: #667085;
-}
-
-.profile-row strong {
-  color: #17202a;
-}
-
-.profile-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.aside-workflow {
-  display: grid;
-  gap: 12px;
-}
-
-.aside-step {
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 10px;
-}
-
-.aside-index {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 4px;
-  background: #eef7f6;
-  color: #0f766e;
-  font-weight: 750;
-}
-
-.aside-step p {
-  margin: 4px 0 0;
-  color: #667085;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.data-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.data-list span {
-  padding: 7px 10px;
-  border: 1px solid #e5eaf1;
-  border-radius: 4px;
-  background: #f9fbfd;
-  color: #344054;
-  font-size: 13px;
-}
-
-@media (max-width: 1100px) {
-  .planner-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .planner-aside {
-    position: static;
-  }
 }
 
 /* Keep fixed-format controls compact and square. */
