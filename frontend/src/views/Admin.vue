@@ -18,7 +18,7 @@
     </div>
 
     <a-spin :spinning="loading">
-      <div class="metric-grid admin-metrics">
+      <div id="admin-overview" class="metric-grid admin-metrics">
         <div class="metric-card">
           <div class="metric-label">用户数</div>
           <div class="metric-value">{{ stats?.user_count || 0 }}</div>
@@ -76,8 +76,13 @@
         <a-empty v-else description="暂无城市数据" />
       </section>
 
-      <section class="content-panel" style="margin-bottom: 18px">
-        <h2 class="section-title-modern">任务日志</h2>
+      <section id="admin-tasks" class="content-panel" style="margin-bottom: 18px">
+        <div class="admin-section-head">
+          <div>
+            <h2 class="section-title-modern">任务日志</h2>
+            <p>查看最近的 Agent 生成任务、运行阶段和失败原因。</p>
+          </div>
+        </div>
         <a-table :data-source="tasks" :columns="taskColumns" row-key="id" :pagination="{ pageSize: 8 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'status'">
@@ -93,9 +98,39 @@
         </a-table>
       </section>
 
-      <section class="content-panel">
-        <h2 class="section-title-modern">用户列表</h2>
-        <a-table :data-source="users" :columns="userColumns" row-key="id" :pagination="{ pageSize: 8 }">
+      <section id="admin-users" class="content-panel">
+        <div class="admin-section-head">
+          <div>
+            <h2 class="section-title-modern">用户管理</h2>
+            <p>检索用户、调整管理员权限，并停用异常账号。</p>
+          </div>
+          <div class="user-admin-stats">
+            <a-tag color="green">管理员 {{ adminUserCount }}</a-tag>
+            <a-tag color="blue">普通用户 {{ normalUserCount }}</a-tag>
+            <a-tag color="red">停用 {{ inactiveUserCount }}</a-tag>
+          </div>
+        </div>
+
+        <div class="admin-filter-bar">
+          <a-input-search
+            v-model:value="userKeyword"
+            placeholder="搜索用户名或邮箱"
+            allow-clear
+            style="max-width: 320px"
+          />
+          <a-select v-model:value="roleFilter" placeholder="角色" style="width: 140px">
+            <a-select-option value="all">全部角色</a-select-option>
+            <a-select-option value="admin">管理员</a-select-option>
+            <a-select-option value="user">普通用户</a-select-option>
+          </a-select>
+          <a-select v-model:value="activeFilter" placeholder="状态" style="width: 140px">
+            <a-select-option value="all">全部状态</a-select-option>
+            <a-select-option value="active">启用</a-select-option>
+            <a-select-option value="inactive">停用</a-select-option>
+          </a-select>
+        </div>
+
+        <a-table :data-source="filteredUsers" :columns="userColumns" row-key="id" :pagination="{ pageSize: 8 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'role'">
               <a-tag :color="record.is_admin ? 'green' : 'blue'">{{ record.is_admin ? '管理员' : '用户' }}</a-tag>
@@ -104,22 +139,39 @@
               <a-tag :color="record.is_active ? 'green' : 'red'">{{ record.is_active ? '启用' : '停用' }}</a-tag>
             </template>
             <template v-else-if="column.key === 'action'">
-              <a-popconfirm
-                :title="record.is_admin ? '确认取消该用户的管理员权限？' : '确认将该用户设为管理员？'"
-                ok-text="确认"
-                cancel-text="取消"
-                @confirm="toggleAdminRole(record)"
-              >
-                <a-button
-                  size="small"
-                  :type="record.is_admin ? 'default' : 'primary'"
-                  :danger="record.is_admin"
-                  :loading="roleChangingId === record.id"
-                  :disabled="record.id === currentUserId && record.is_admin"
+              <a-space>
+                <a-popconfirm
+                  :title="record.is_admin ? '确认取消该用户的管理员权限？' : '确认将该用户设为管理员？'"
+                  ok-text="确认"
+                  cancel-text="取消"
+                  @confirm="toggleAdminRole(record)"
                 >
-                  {{ record.is_admin ? '取消管理员' : '设为管理员' }}
-                </a-button>
-              </a-popconfirm>
+                  <a-button
+                    size="small"
+                    :type="record.is_admin ? 'default' : 'primary'"
+                    :danger="record.is_admin"
+                    :loading="roleChangingId === record.id"
+                    :disabled="record.id === currentUserId && record.is_admin"
+                  >
+                    {{ record.is_admin ? '取消管理员' : '设为管理员' }}
+                  </a-button>
+                </a-popconfirm>
+                <a-popconfirm
+                  :title="record.is_active ? '确认停用该用户？停用后将无法登录。' : '确认启用该用户？'"
+                  ok-text="确认"
+                  cancel-text="取消"
+                  @confirm="toggleActiveStatus(record)"
+                >
+                  <a-button
+                    size="small"
+                    :danger="record.is_active"
+                    :loading="activeChangingId === record.id"
+                    :disabled="record.id === currentUserId && record.is_active"
+                  >
+                    {{ record.is_active ? '停用' : '启用' }}
+                  </a-button>
+                </a-popconfirm>
+              </a-space>
             </template>
           </template>
         </a-table>
@@ -129,14 +181,25 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { fetchAdminStats, fetchAdminTasks, fetchAdminUsers, getStoredUser, updateAdminUserRole } from '@/services/api'
+import {
+  fetchAdminStats,
+  fetchAdminTasks,
+  fetchAdminUsers,
+  getStoredUser,
+  updateAdminUserActive,
+  updateAdminUserRole
+} from '@/services/api'
 import type { AdminStats, AdminTaskSummary, AdminUserSummary } from '@/types'
 
 const loading = ref(false)
 const roleChangingId = ref<number | null>(null)
+const activeChangingId = ref<number | null>(null)
 const taskStatus = ref<string | undefined>()
+const userKeyword = ref('')
+const roleFilter = ref<'all' | 'admin' | 'user'>('all')
+const activeFilter = ref<'all' | 'active' | 'inactive'>('all')
 const stats = ref<AdminStats | null>(null)
 const tasks = ref<AdminTaskSummary[]>([])
 const users = ref<AdminUserSummary[]>([])
@@ -161,8 +224,31 @@ const userColumns = [
   { title: '状态', key: 'active' },
   { title: '行程数', dataIndex: 'trip_count', key: 'trip_count' },
   { title: '注册时间', dataIndex: 'created_at', key: 'created_at' },
-  { title: '操作', key: 'action', width: 130 }
+  { title: '操作', key: 'action', width: 260 }
 ]
+
+const adminUserCount = computed(() => users.value.filter(user => user.is_admin).length)
+const normalUserCount = computed(() => users.value.filter(user => !user.is_admin).length)
+const inactiveUserCount = computed(() => users.value.filter(user => !user.is_active).length)
+
+const filteredUsers = computed(() => {
+  const keyword = userKeyword.value.trim().toLowerCase()
+  return users.value.filter(user => {
+    const matchesKeyword = !keyword ||
+      user.username.toLowerCase().includes(keyword) ||
+      user.email.toLowerCase().includes(keyword)
+    const matchesRole =
+      roleFilter.value === 'all' ||
+      (roleFilter.value === 'admin' && user.is_admin) ||
+      (roleFilter.value === 'user' && !user.is_admin)
+    const matchesActive =
+      activeFilter.value === 'all' ||
+      (activeFilter.value === 'active' && user.is_active) ||
+      (activeFilter.value === 'inactive' && !user.is_active)
+
+    return matchesKeyword && matchesRole && matchesActive
+  })
+})
 
 const statusText = (status: string) => {
   const map: Record<string, string> = {
@@ -225,6 +311,19 @@ const toggleAdminRole = async (record: AdminUserSummary) => {
   }
 }
 
+const toggleActiveStatus = async (record: AdminUserSummary) => {
+  activeChangingId.value = record.id
+  try {
+    const updated = await updateAdminUserActive(record.id, !record.is_active)
+    users.value = users.value.map(user => (user.id === updated.id ? updated : user))
+    message.success(updated.is_active ? '已启用用户' : '已停用用户')
+  } catch (error: any) {
+    message.error(error.response?.data?.detail || '用户状态更新失败')
+  } finally {
+    activeChangingId.value = null
+  }
+}
+
 onMounted(loadAll)
 </script>
 
@@ -243,6 +342,37 @@ onMounted(loadAll)
 
 .metric-card.danger .metric-value {
   color: #dc2626;
+}
+
+.admin-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.admin-section-head h2 {
+  margin-bottom: 4px;
+}
+
+.admin-section-head p {
+  margin: 0;
+  color: #667085;
+}
+
+.user-admin-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.admin-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .error-text {
@@ -284,6 +414,14 @@ onMounted(loadAll)
   .admin-metrics,
   .admin-task-metrics {
     grid-template-columns: 1fr;
+  }
+
+  .admin-section-head {
+    flex-direction: column;
+  }
+
+  .user-admin-stats {
+    justify-content: flex-start;
   }
 }
 </style>

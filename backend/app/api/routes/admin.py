@@ -9,7 +9,14 @@ from sqlalchemy.orm import Session
 from ...auth import get_current_user
 from ...database import get_db
 from ...db_models import FavoritePlace, TripPlanRecord, TripPlanTask, User
-from ...models.schemas import AdminCityStat, AdminStats, AdminTaskSummary, AdminUserRoleUpdate, AdminUserSummary
+from ...models.schemas import (
+    AdminCityStat,
+    AdminStats,
+    AdminTaskSummary,
+    AdminUserActiveUpdate,
+    AdminUserRoleUpdate,
+    AdminUserSummary,
+)
 
 
 router = APIRouter(prefix="/admin", tags=["管理员后台"])
@@ -139,6 +146,32 @@ async def update_user_admin_role(
             raise HTTPException(status_code=400, detail="系统至少需要保留一个启用的管理员")
 
     user.is_admin = payload.is_admin
+    db.commit()
+    db.refresh(user)
+    return to_admin_user_summary(db, user)
+
+
+@router.patch("/users/{user_id}/active", response_model=AdminUserSummary, summary="启用或停用用户")
+async def update_user_active_status(
+    user_id: int,
+    payload: AdminUserActiveUpdate,
+    current_user: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """启用或停用用户账号。"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+
+    if user.id == current_user.id and not payload.is_active:
+        raise HTTPException(status_code=400, detail="不能停用自己的账号")
+
+    if user.is_admin and user.is_active and not payload.is_active:
+        admin_count = db.query(User).filter(User.is_admin.is_(True), User.is_active.is_(True)).count()
+        if admin_count <= 1:
+            raise HTTPException(status_code=400, detail="系统至少需要保留一个启用的管理员")
+
+    user.is_active = payload.is_active
     db.commit()
     db.refresh(user)
     return to_admin_user_summary(db, user)

@@ -4,6 +4,31 @@
       <router-view />
     </template>
 
+    <template v-else-if="isAdminPage">
+      <header class="admin-header">
+        <RouterLink class="brand" to="/admin">
+          <span class="brand-mark">T</span>
+          <span>TripMind Admin</span>
+        </RouterLink>
+
+        <nav class="admin-nav">
+          <a href="#admin-overview">系统概览</a>
+          <a href="#admin-tasks">任务监控</a>
+          <a href="#admin-users">用户管理</a>
+        </nav>
+
+        <a-space>
+          <RouterLink class="nav-link" to="/dashboard">返回前台</RouterLink>
+          <span style="color: #667085">{{ userName }}</span>
+          <a-button @click="logout">退出</a-button>
+        </a-space>
+      </header>
+
+      <main class="app-main admin-main">
+        <router-view />
+      </main>
+    </template>
+
     <template v-else>
       <header class="app-header">
         <RouterLink class="brand" to="/dashboard">
@@ -44,6 +69,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
+const isAdminPage = computed(() => route.path.startsWith('/admin'))
 const userName = computed(() => {
   route.fullPath
   return getStoredUser()?.username || '旅行者'

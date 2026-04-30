@@ -315,6 +315,11 @@ class AdminUserRoleUpdate(BaseModel):
     is_admin: bool
 
 
+class AdminUserActiveUpdate(BaseModel):
+    """用户启停请求"""
+    is_active: bool
+
+
 class AdminTaskSummary(BaseModel):
     """管理员任务摘要"""
     id: int
