@@ -9,7 +9,7 @@ flowchart TB
   U["用户/管理员"] --> F["Vue3 + TypeScript 前端"]
   F --> A["FastAPI REST API"]
   A --> Auth["JWT 认证与权限控制"]
-  A --> DB["MySQL 数据库"]
+  A --> DB["PostgreSQL 数据库"]
   A --> Task["异步任务执行器"]
   Task --> G["LangGraph 多 Agent 工作流"]
   G --> LLM["LangChain / LLM 服务"]

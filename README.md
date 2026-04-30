@@ -19,7 +19,7 @@ TripMind 是一个面向毕业设计和本地演示的智能旅行规划 Web 系
 | 层级 | 技术 |
 | --- | --- |
 | 前端 | Vue3、TypeScript、Vite、Ant Design Vue、Axios、AMap JS API |
-| 后端 | FastAPI、Pydantic、SQLAlchemy、MySQL、JWT |
+| 后端 | FastAPI、Pydantic、SQLAlchemy、PostgreSQL、JWT |
 | AI 编排 | LangGraph、LangChain、OpenAI 兼容模型接口 |
 | 外部服务 | 高德地图 REST API、Unsplash 图片服务 |
 | 导出 | html2canvas、jsPDF |
@@ -51,7 +51,7 @@ intelligent-trip-planner/
 ├── docs/
 │   └── ARCHITECTURE.md          # 架构图、时序图、ER 图
 ├── scripts/
-│   └── init_mysql.sql           # MySQL 建库和授权脚本
+│   └── init_postgres.sql        # PostgreSQL 建库和授权脚本
 ├── start-dev.ps1                # Windows 一键启动脚本
 └── README.md
 ```
@@ -60,7 +60,7 @@ intelligent-trip-planner/
 
 - Python 3.10+
 - Node.js 18+
-- MySQL 8.0+
+- PostgreSQL 14+
 - PowerShell 5+
 - 可访问 LLM 服务和高德开放平台的网络环境
 
@@ -110,16 +110,16 @@ DEFAULT_ADMIN_PASSWORD=ChangeMe123456
 
 ## 一键启动
 
-首次运行前先创建 MySQL 数据库。使用 MySQL root 账号执行：
+首次运行前先创建 PostgreSQL 数据库。使用 PostgreSQL 管理员账号执行：
 
 ```powershell
-mysql -u root -p < scripts\init_mysql.sql
+psql -U postgres -f scripts\init_postgres.sql
 ```
 
 默认连接地址为：
 
 ```text
-mysql+pymysql://tripmind:tripmind123@localhost:3306/tripmind?charset=utf8mb4
+postgresql+psycopg://tripmind:tripmind123@localhost:5432/tripmind
 ```
 
 如果你修改了数据库用户名、密码或库名，需要同步修改 `backend/.env` 中的 `DATABASE_URL`。
@@ -224,16 +224,16 @@ npm run dev
 
 ## 数据库
 
-默认数据库为 MySQL，后端通过 SQLAlchemy ORM 自动创建业务表。首次运行前需要先创建数据库和授权用户：
+默认数据库为 PostgreSQL，后端通过 SQLAlchemy ORM 自动创建业务表。首次运行前需要先创建数据库和授权用户：
 
 ```powershell
-mysql -u root -p < scripts\init_mysql.sql
+psql -U postgres -f scripts\init_postgres.sql
 ```
 
 后端连接配置位于 `backend/.env`：
 
 ```text
-DATABASE_URL=mysql+pymysql://tripmind:tripmind123@localhost:3306/tripmind?charset=utf8mb4
+DATABASE_URL=postgresql+psycopg://tripmind:tripmind123@localhost:5432/tripmind
 ```
 
 核心表：
@@ -247,7 +247,7 @@ DATABASE_URL=mysql+pymysql://tripmind:tripmind123@localhost:3306/tripmind?charse
 
 ## 演示方式
 
-当前稳定版本推荐本地演示：启动 MySQL 后，在项目根目录执行 `.\start-dev.ps1`，同时启动 FastAPI 后端和 Vue 前端。这样可以直接使用本地数据库、LLM Key 和高德 Key，最适合毕业设计答辩。
+当前稳定版本推荐本地演示：启动 PostgreSQL 后，在项目根目录执行 `.\start-dev.ps1`，同时启动 FastAPI 后端和 Vue 前端。这样可以直接使用本地数据库、LLM Key 和高德 Key，最适合毕业设计答辩。
 
 如果后续需要给其他电脑长期访问，应同时部署前端和后端，并把 `frontend/.env` 中的 `VITE_API_BASE_URL` 改成后端公网地址。只部署前端无法完成登录、规划、收藏和后台管理等功能。
 
