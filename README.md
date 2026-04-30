@@ -5,7 +5,7 @@ TripMind 是一个面向毕业设计和本地演示的智能旅行规划 Web 系
 ## 核心功能
 
 - 用户认证：注册、登录、JWT 鉴权、个人资料维护。
-- 权限区分：首个注册账号自动成为管理员，普通用户无法进入后台。
+- 权限区分：普通注册账号默认为普通用户，默认管理员由环境变量初始化，普通用户无法进入后台。
 - 智能规划：根据城市、日期、交通、住宿、偏好和补充需求生成结构化行程。
 - 多 Agent 工作流：需求解析、景点搜索、天气查询、酒店推荐、行程生成、结构校验、结果修复。
 - 异步任务：行程生成通过任务 ID 轮询进度，避免长时间阻塞前端。
@@ -79,6 +79,9 @@ LLM_BASE_URL
 AMAP_API_KEY
 UNSPLASH_ACCESS_KEY
 UNSPLASH_SECRET_KEY
+DEFAULT_ADMIN_EMAIL
+DEFAULT_ADMIN_USERNAME
+DEFAULT_ADMIN_PASSWORD
 ```
 
 前端 `frontend/.env` 需要配置：
@@ -90,6 +93,16 @@ VITE_AMAP_SECURITY_JS_CODE
 ```
 
 `.env` 文件只保存在本地，不要提交到仓库。
+
+默认管理员账号由后端启动时自动初始化。建议演示环境使用专门账号，正式部署前务必修改初始密码：
+
+```text
+DEFAULT_ADMIN_EMAIL=admin@tripmind.local
+DEFAULT_ADMIN_USERNAME=系统管理员
+DEFAULT_ADMIN_PASSWORD=ChangeMe123456
+```
+
+普通用户注册不会获得管理员权限。管理员进入后台后，可以在用户列表中授予或取消其他用户的管理员权限；系统会阻止取消自己的管理员权限，并至少保留一个启用管理员。
 
 ## 一键启动
 
@@ -161,10 +174,10 @@ npm run dev
 | 页面 | 路径 | 说明 |
 | --- | --- | --- |
 | 登录 | `/login` | 普通用户和管理员统一登录入口 |
-| 注册 | `/register` | 创建普通用户；首个用户自动成为管理员 |
+| 注册 | `/register` | 创建普通用户 |
 | 工作台 | `/dashboard` | 用户行程、收藏和最近记录 |
 | 规划 | `/` | 输入需求，创建异步 Agent 规划任务 |
-| 结果 | `/result` | 展示每日行程、地图、预算、天气和 Agent 报告 |
+| 结果 | `/result` | 展示每日行程、地图、预算和天气 |
 | 我的行程 | `/trips` | 历史行程列表 |
 | 收藏 | `/favorites` | 收藏地点管理 |
 | 探索 | `/explore` | POI 搜索和地图标注 |
@@ -189,6 +202,7 @@ npm run dev
 | `GET /api/admin/stats` | 管理后台统计 |
 | `GET /api/admin/tasks` | 管理后台任务日志 |
 | `GET /api/admin/users` | 管理后台用户列表 |
+| `PATCH /api/admin/users/{id}/role` | 授予或取消管理员权限 |
 
 ## 数据库
 

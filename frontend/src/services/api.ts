@@ -171,6 +171,11 @@ export async function fetchAdminUsers(params?: { limit?: number }): Promise<Admi
   return response.data
 }
 
+export async function updateAdminUserRole(userId: number, isAdmin: boolean): Promise<AdminUserSummary> {
+  const response = await apiClient.patch<AdminUserSummary>(`/api/admin/users/${userId}/role`, { is_admin: isAdmin })
+  return response.data
+}
+
 /**
  * 健康检查
  */

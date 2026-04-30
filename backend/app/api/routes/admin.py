@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from ...auth import get_current_user
 from ...database import get_db
 from ...db_models import FavoritePlace, TripPlanRecord, TripPlanTask, User
-from ...models.schemas import AdminCityStat, AdminStats, AdminTaskSummary, AdminUserSummary
+from ...models.schemas import AdminCityStat, AdminStats, AdminTaskSummary, AdminUserRoleUpdate, AdminUserSummary
 
 
 router = APIRouter(prefix="/admin", tags=["管理员后台"])
@@ -20,6 +20,19 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="需要管理员权限")
     return current_user
+
+
+def to_admin_user_summary(db: Session, user: User) -> AdminUserSummary:
+    """组装后台用户摘要。"""
+    return AdminUserSummary(
+        id=user.id,
+        email=user.email,
+        username=user.username,
+        is_admin=user.is_admin,
+        is_active=user.is_active,
+        trip_count=db.query(TripPlanRecord).filter(TripPlanRecord.user_id == user.id).count(),
+        created_at=user.created_at.isoformat(),
+    )
 
 
 @router.get("/stats", response_model=AdminStats, summary="系统统计")
@@ -101,15 +114,31 @@ async def list_admin_users(
     users = db.query(User).order_by(User.created_at.desc()).limit(limit).all()
     result = []
     for user in users:
-        result.append(
-            AdminUserSummary(
-                id=user.id,
-                email=user.email,
-                username=user.username,
-                is_admin=user.is_admin,
-                is_active=user.is_active,
-                trip_count=db.query(TripPlanRecord).filter(TripPlanRecord.user_id == user.id).count(),
-                created_at=user.created_at.isoformat(),
-            )
-        )
+        result.append(to_admin_user_summary(db, user))
     return result
+
+
+@router.patch("/users/{user_id}/role", response_model=AdminUserSummary, summary="设置管理员权限")
+async def update_user_admin_role(
+    user_id: int,
+    payload: AdminUserRoleUpdate,
+    current_user: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """授予或取消用户的管理员权限。"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+
+    if user.id == current_user.id and not payload.is_admin:
+        raise HTTPException(status_code=400, detail="不能取消自己的管理员权限")
+
+    if user.is_admin and not payload.is_admin:
+        admin_count = db.query(User).filter(User.is_admin.is_(True), User.is_active.is_(True)).count()
+        if admin_count <= 1:
+            raise HTTPException(status_code=400, detail="系统至少需要保留一个启用的管理员")
+
+    user.is_admin = payload.is_admin
+    db.commit()
+    db.refresh(user)
+    return to_admin_user_summary(db, user)

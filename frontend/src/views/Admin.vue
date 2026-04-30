@@ -103,6 +103,24 @@
             <template v-else-if="column.key === 'active'">
               <a-tag :color="record.is_active ? 'green' : 'red'">{{ record.is_active ? '启用' : '停用' }}</a-tag>
             </template>
+            <template v-else-if="column.key === 'action'">
+              <a-popconfirm
+                :title="record.is_admin ? '确认取消该用户的管理员权限？' : '确认将该用户设为管理员？'"
+                ok-text="确认"
+                cancel-text="取消"
+                @confirm="toggleAdminRole(record)"
+              >
+                <a-button
+                  size="small"
+                  :type="record.is_admin ? 'default' : 'primary'"
+                  :danger="record.is_admin"
+                  :loading="roleChangingId === record.id"
+                  :disabled="record.id === currentUserId && record.is_admin"
+                >
+                  {{ record.is_admin ? '取消管理员' : '设为管理员' }}
+                </a-button>
+              </a-popconfirm>
+            </template>
           </template>
         </a-table>
       </section>
@@ -113,14 +131,16 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { fetchAdminStats, fetchAdminTasks, fetchAdminUsers } from '@/services/api'
+import { fetchAdminStats, fetchAdminTasks, fetchAdminUsers, getStoredUser, updateAdminUserRole } from '@/services/api'
 import type { AdminStats, AdminTaskSummary, AdminUserSummary } from '@/types'
 
 const loading = ref(false)
+const roleChangingId = ref<number | null>(null)
 const taskStatus = ref<string | undefined>()
 const stats = ref<AdminStats | null>(null)
 const tasks = ref<AdminTaskSummary[]>([])
 const users = ref<AdminUserSummary[]>([])
+const currentUserId = getStoredUser()?.id
 
 const taskColumns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 70 },
@@ -140,7 +160,8 @@ const userColumns = [
   { title: '角色', key: 'role' },
   { title: '状态', key: 'active' },
   { title: '行程数', dataIndex: 'trip_count', key: 'trip_count' },
-  { title: '注册时间', dataIndex: 'created_at', key: 'created_at' }
+  { title: '注册时间', dataIndex: 'created_at', key: 'created_at' },
+  { title: '操作', key: 'action', width: 130 }
 ]
 
 const statusText = (status: string) => {
@@ -188,6 +209,19 @@ const loadAll = async () => {
     message.error(error.response?.data?.detail || '管理员数据加载失败')
   } finally {
     loading.value = false
+  }
+}
+
+const toggleAdminRole = async (record: AdminUserSummary) => {
+  roleChangingId.value = record.id
+  try {
+    const updated = await updateAdminUserRole(record.id, !record.is_admin)
+    users.value = users.value.map(user => (user.id === updated.id ? updated : user))
+    message.success(updated.is_admin ? '已设为管理员' : '已取消管理员权限')
+  } catch (error: any) {
+    message.error(error.response?.data?.detail || '管理员权限更新失败')
+  } finally {
+    roleChangingId.value = null
   }
 }
 

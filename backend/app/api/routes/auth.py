@@ -44,12 +44,11 @@ async def register(payload: UserCreate, db: Session = Depends(get_db)):
     if "@" not in email:
         raise HTTPException(status_code=400, detail="邮箱格式不正确")
 
-    is_first_user = db.query(User).count() == 0
     user = User(
         email=email,
         username=username,
         hashed_password=hash_password(payload.password),
-        is_admin=is_first_user,
+        is_admin=False,
     )
     db.add(user)
     try:

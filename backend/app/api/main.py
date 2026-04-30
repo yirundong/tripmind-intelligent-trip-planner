@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ..config import get_settings, validate_config, print_config
 from ..database import init_db
+from ..services.admin_seed import seed_default_admin
 from .routes import admin, auth, trip, trips, poi, map as map_routes
 
 # 获取配置
@@ -49,6 +50,9 @@ async def startup_event():
     # 初始化本地数据库
     init_db()
     print("✅ 数据库初始化完成")
+
+    # 初始化默认管理员；具体账号来自.env，避免在代码中硬编码敏感信息。
+    seed_default_admin()
     
     # 验证配置
     try:

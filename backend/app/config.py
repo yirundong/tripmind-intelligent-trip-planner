@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     jwt_secret_key: str = "change-this-secret-in-production"
     jwt_expire_minutes: int = 60 * 24 * 7
 
+    # 默认管理员账号。普通注册入口不会创建管理员，后台首次启动时按这些环境变量初始化。
+    default_admin_email: str = ""
+    default_admin_username: str = "系统管理员"
+    default_admin_password: str = ""
+
     # 高德地图API配置
     amap_api_key: str = ""
 
@@ -96,6 +101,7 @@ def print_config():
     print(f"版本: {settings.app_version}")
     print(f"服务器: {settings.host}:{settings.port}")
     print(f"数据库: {settings.database_url}")
+    print(f"默认管理员: {'已配置' if settings.default_admin_email and settings.default_admin_password else '未配置'}")
     print(f"高德地图API Key: {'已配置' if settings.amap_api_key else '未配置'}")
 
     # 检查LLM配置

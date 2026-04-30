@@ -310,6 +310,11 @@ class AdminUserSummary(BaseModel):
     created_at: str
 
 
+class AdminUserRoleUpdate(BaseModel):
+    """管理员角色变更请求"""
+    is_admin: bool
+
+
 class AdminTaskSummary(BaseModel):
     """管理员任务摘要"""
     id: int

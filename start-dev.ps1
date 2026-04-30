@@ -7,6 +7,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $env:PYTHONUTF8 = "1"
+$env:CI = "1"
 $OutputEncoding = [System.Text.UTF8Encoding]::new()
 [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
@@ -28,6 +29,7 @@ $BackendOutLog = Join-Path $RunDir "backend.out.log"
 $BackendErrLog = Join-Path $RunDir "backend.err.log"
 $FrontendOutLog = Join-Path $RunDir "frontend.out.log"
 $FrontendErrLog = Join-Path $RunDir "frontend.err.log"
+$FrontendInFile = Join-Path $RunDir "frontend.in"
 
 function Assert-InWorkspace {
     param([string]$Path)
@@ -155,6 +157,7 @@ if (-not $NoPortCleanup) {
 foreach ($logFile in @($BackendOutLog, $BackendErrLog, $FrontendOutLog, $FrontendErrLog)) {
     Set-Content -LiteralPath $logFile -Value "" -Encoding UTF8
 }
+Set-Content -LiteralPath $FrontendInFile -Value "" -Encoding UTF8
 
 Write-Host "[run] Starting backend on $BackendPort and frontend on $FrontendPort..."
 
@@ -171,6 +174,7 @@ $frontendProcess = Start-Process `
     -FilePath $NodeCommand.Source `
     -ArgumentList @("node_modules\vite\bin\vite.js", "--host", "0.0.0.0", "--port", "$FrontendPort") `
     -WorkingDirectory $FrontendDir `
+    -RedirectStandardInput $FrontendInFile `
     -RedirectStandardOutput $FrontendOutLog `
     -RedirectStandardError $FrontendErrLog `
     -WindowStyle Hidden `
