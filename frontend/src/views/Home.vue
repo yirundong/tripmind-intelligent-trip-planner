@@ -9,6 +9,20 @@
     <div class="planner-layout">
       <a-card class="form-card" :bordered="false">
         <a-form :model="formData" layout="vertical" @finish="handleSubmit">
+          <div v-if="favoriteContext.favorites.length" class="favorite-context-panel">
+            <div>
+              <div class="context-title">
+                {{ favoriteContext.mode === 'focus' ? '围绕收藏地点规划' : '已带入收藏地点' }}
+              </div>
+              <div class="context-list">
+                <a-tag v-for="item in favoriteContext.favorites" :key="item.id">
+                  {{ item.name }}
+                </a-tag>
+              </div>
+            </div>
+            <a-button size="small" @click="clearFavoriteContext">移除</a-button>
+          </div>
+
           <div class="form-section">
             <div class="section-header">
               <EnvironmentOutlined />
@@ -232,7 +246,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, watch } from 'vue'
+import { computed, onMounted, ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import {
@@ -242,12 +256,20 @@ import {
   SettingOutlined
 } from '@ant-design/icons-vue'
 import { createTripPlanTask, fetchTrip, fetchTripPlanTask, getStoredUser } from '@/services/api'
-import type { TripFormData } from '@/types'
+import type { FavoritePlace, TripFormData } from '@/types'
 import type { Dayjs } from 'dayjs'
+
+const FAVORITE_PLANNING_KEY = 'tripPlanningFavorites'
 
 type TripFormState = Omit<TripFormData, 'start_date' | 'end_date'> & {
   start_date: Dayjs | null
   end_date: Dayjs | null
+}
+
+type FavoritePlanningContext = {
+  mode: 'selected' | 'focus'
+  favorites: FavoritePlace[]
+  created_at?: string
 }
 
 const router = useRouter()
@@ -255,7 +277,12 @@ const loading = ref(false)
 const loadingProgress = ref(0)
 const loadingStatus = ref('')
 const customPreference = ref('')
+const favoritePromptText = ref('')
 const storedUser = getStoredUser()
+const favoriteContext = reactive<FavoritePlanningContext>({
+  mode: 'selected',
+  favorites: []
+})
 const suggestedPreferences = [
   '历史文化',
   '自然风光',
@@ -337,6 +364,89 @@ const togglePreference = (tag: string, checked: boolean) => {
   } else {
     removePreference(tag)
   }
+}
+
+const compactPlace = (item: FavoritePlace) => {
+  return [
+    item.name,
+    item.city ? `城市：${item.city}` : '',
+    item.category ? `类型：${item.category}` : '',
+    item.address ? `地址：${item.address}` : '',
+    item.notes ? `备注：${item.notes}` : ''
+  ].filter(Boolean).join('，')
+}
+
+const buildFavoritePrompt = (context: FavoritePlanningContext) => {
+  const places = context.favorites
+    .map((item, index) => `${index + 1}. ${compactPlace(item)}`)
+    .join('\n')
+
+  if (context.mode === 'focus' && context.favorites[0]) {
+    return `请围绕用户收藏地点“${context.favorites[0].name}”规划本次行程，优先把它作为核心停留点，并结合附近景点、餐饮和路线效率安排。\n收藏地点：\n${places}`
+  }
+
+  return `请优先评估以下用户收藏地点是否适合加入本次行程；如果距离、时间或主题不匹配，可以不强行安排，并在建议中说明取舍。\n收藏地点：\n${places}`
+}
+
+const inferPreferenceFromFavorite = (item: FavoritePlace) => {
+  const text = `${item.category} ${item.notes} ${item.name}`
+  const mappings = [
+    { keywords: ['餐饮', '餐厅', '美食', '小吃'], tag: '美食' },
+    { keywords: ['酒店', '住宿', '宾馆'], tag: '住宿' },
+    { keywords: ['学校', '科教', '博物馆', '展览', '文化'], tag: '研学' },
+    { keywords: ['公园', '风景', '自然'], tag: '自然风光' },
+    { keywords: ['商场', '购物', '商圈'], tag: '购物' }
+  ]
+  return mappings.find(mapping => mapping.keywords.some(keyword => text.includes(keyword)))?.tag
+}
+
+const applyFavoritePlanningContext = () => {
+  const raw = sessionStorage.getItem(FAVORITE_PLANNING_KEY)
+  if (!raw) return
+
+  try {
+    const context = JSON.parse(raw) as FavoritePlanningContext
+    if (!Array.isArray(context.favorites) || context.favorites.length === 0) return
+
+    favoriteContext.mode = context.mode === 'focus' ? 'focus' : 'selected'
+    favoriteContext.favorites = context.favorites
+
+    const firstCity = context.favorites.find(item => item.city)?.city
+    if (firstCity) {
+      formData.city = firstCity
+    }
+
+    context.favorites
+      .map(inferPreferenceFromFavorite)
+      .filter((tag): tag is string => Boolean(tag))
+      .forEach(tag => {
+        if (!formData.preferences.includes(tag)) {
+          formData.preferences.push(tag)
+        }
+      })
+
+    const prompt = buildFavoritePrompt(context)
+    favoritePromptText.value = prompt
+    if (!formData.free_text_input.includes(prompt)) {
+      formData.free_text_input = formData.free_text_input
+        ? `${formData.free_text_input.trim()}\n\n${prompt}`
+        : prompt
+    }
+
+    sessionStorage.removeItem(FAVORITE_PLANNING_KEY)
+  } catch (error) {
+    console.error('读取收藏规划上下文失败:', error)
+    sessionStorage.removeItem(FAVORITE_PLANNING_KEY)
+  }
+}
+
+const clearFavoriteContext = () => {
+  favoriteContext.favorites = []
+  if (favoritePromptText.value) {
+    formData.free_text_input = formData.free_text_input.replace(favoritePromptText.value, '').trim()
+    favoritePromptText.value = ''
+  }
+  message.success('已移除本次收藏输入')
 }
 
 const resetLoading = () => {
@@ -426,6 +536,8 @@ const handleSubmit = async () => {
     resetLoading()
   }
 }
+
+onMounted(applyFavoritePlanningContext)
 </script>
 
 <style scoped>
@@ -580,6 +692,30 @@ const handleSubmit = async () => {
 .form-section {
   margin-bottom: 24px;
   padding: 22px;
+}
+
+.favorite-context-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #cde7e3;
+  border-radius: 8px;
+  background: #f7fcfb;
+}
+
+.context-title {
+  margin-bottom: 10px;
+  color: #0f766e;
+  font-weight: 750;
+}
+
+.context-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .planner-layout {
