@@ -7,15 +7,7 @@
           <span>TripMind</span>
         </RouterLink>
         <h1 class="auth-title">创建账号</h1>
-        <p class="auth-subtitle">注册默认创建普通用户账号，用于旅行规划、收藏和行程管理。</p>
-
-        <a-alert
-          type="info"
-          show-icon
-          message="管理员账号说明"
-          description="管理员用于系统统计和任务日志管理。演示环境中首个注册账号会被初始化为管理员，后续注册账号均为普通用户。"
-          style="margin-bottom: 22px"
-        />
+        <p class="auth-subtitle">保存偏好、复用行程、收藏地点，让每一次规划都有迹可循。</p>
 
         <a-form layout="vertical" :model="form" @finish="submit">
           <a-form-item label="用户名" name="username" :rules="[{ required: true, message: '请输入用户名' }]">

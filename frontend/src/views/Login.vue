@@ -7,18 +7,7 @@
           <span>TripMind</span>
         </RouterLink>
         <h1 class="auth-title">欢迎回来</h1>
-        <p class="auth-subtitle">普通用户进入旅行规划工作台，管理员登录后可进入系统管理后台。</p>
-
-        <div class="role-hint">
-          <div>
-            <strong>普通用户</strong>
-            <span>规划行程、管理收藏、编辑历史方案</span>
-          </div>
-          <div>
-            <strong>管理员</strong>
-            <span>查看用户、任务日志和系统运行统计</span>
-          </div>
-        </div>
+        <p class="auth-subtitle">登录后继续管理你的行程、收藏地点和旅行偏好。</p>
 
         <a-form layout="vertical" :model="form" @finish="submit">
           <a-form-item label="邮箱或用户名" name="identity" :rules="[{ required: true, message: '请输入邮箱或用户名' }]">
@@ -84,30 +73,5 @@ const submit = async () => {
 .auth-footer {
   margin-top: 18px;
   color: #667085;
-}
-
-.role-hint {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.role-hint > div {
-  padding: 12px;
-  border: 1px solid #e5eaf1;
-  border-left: 3px solid #0f766e;
-  border-radius: 6px;
-  background: #f9fbfd;
-}
-
-.role-hint strong,
-.role-hint span {
-  display: block;
-}
-
-.role-hint span {
-  margin-top: 4px;
-  color: #667085;
-  font-size: 13px;
 }
 </style>
