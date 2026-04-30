@@ -62,9 +62,6 @@
             <a-menu-item key="weather" v-if="tripPlan.weather_info && tripPlan.weather_info.length > 0">
               <span>天气信息</span>
             </a-menu-item>
-            <a-menu-item key="agent-report">
-              <span>Agent报告</span>
-            </a-menu-item>
           </a-menu>
         </a-affix>
       </div>
@@ -320,31 +317,6 @@
         </a-list>
         </a-card>
 
-        <a-card id="agent-report" title="Agent 协作报告" :bordered="false" class="agent-report-card">
-          <div class="agent-report-head">
-            <div>
-              <div class="agent-kicker">LANGGRAPH WORKFLOW</div>
-              <p>
-                本次行程不是单次文本生成，而是由多个节点分工完成需求理解、数据查询、方案生成和结构校验。
-              </p>
-            </div>
-            <a-tag color="success">结构化输出已校验</a-tag>
-          </div>
-
-          <div class="agent-report-grid">
-            <div v-for="(item, index) in agentReportItems" :key="item.title" class="agent-report-item">
-              <div class="agent-index">{{ index + 1 }}</div>
-              <div class="agent-body">
-                <div class="agent-title">{{ item.title }}</div>
-                <p>{{ item.description }}</p>
-                <div class="agent-tools">
-                  <a-tag v-for="tool in item.tools" :key="tool">{{ tool }}</a-tag>
-                </div>
-                <div class="agent-output">{{ item.output }}</div>
-              </div>
-            </div>
-          </div>
-        </a-card>
       </div>
     </div>
 
@@ -409,51 +381,6 @@ const totalAttractions = computed(() => {
 const hotelCount = computed(() => {
   return tripPlan.value?.days.filter(day => Boolean(day.hotel || day.accommodation)).length || 0
 })
-
-const agentReportItems = [
-  {
-    title: '需求解析 Agent',
-    description: '解析城市、日期、出行天数、交通住宿偏好和用户补充需求。',
-    tools: ['LLM', 'TripRequest'],
-    output: '形成结构化规划约束'
-  },
-  {
-    title: '景点搜索 Agent',
-    description: '根据目的地与偏好检索候选 POI，并补充地址、坐标、评分等信息。',
-    tools: ['高德 POI', '偏好匹配'],
-    output: '生成候选景点池'
-  },
-  {
-    title: '天气查询 Agent',
-    description: '获取日期范围内天气，辅助安排室内外景点和出行提醒。',
-    tools: ['高德天气', '日期映射'],
-    output: '生成每日天气建议'
-  },
-  {
-    title: '酒店推荐 Agent',
-    description: '结合住宿档次和行程位置推荐住宿区域或酒店信息。',
-    tools: ['POI 检索', '住宿偏好'],
-    output: '补充住宿方案'
-  },
-  {
-    title: '行程规划 Agent',
-    description: '将景点、天气、住宿和餐饮组合成每日可执行路线。',
-    tools: ['LangChain', '提示模板'],
-    output: '生成每日行程'
-  },
-  {
-    title: '结构校验 Agent',
-    description: '校验天数、字段、预算和日期索引，保证前端可稳定渲染。',
-    tools: ['Pydantic', '规则校验'],
-    output: '修正格式和缺失字段'
-  },
-  {
-    title: '结果返回 Agent',
-    description: '保存生成结果并返回任务状态、行程 ID 和可编辑方案。',
-    tools: ['数据库', '任务轮询'],
-    output: '沉淀为用户行程资产'
-  }
-] as const
 
 onMounted(async () => {
   const data = sessionStorage.getItem('tripPlan')
@@ -1290,86 +1217,6 @@ const drawRoutes = (AMap: any, attractions: any[]) => {
   font-size: 14px;
 }
 
-.agent-report-card {
-  margin-top: 20px;
-}
-
-.agent-report-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  align-items: flex-start;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e5eaf1;
-}
-
-.agent-kicker {
-  color: #0f766e;
-  font-size: 12px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
-}
-
-.agent-report-head p {
-  margin: 6px 0 0;
-  color: #667085;
-  line-height: 1.7;
-}
-
-.agent-report-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.agent-report-item {
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #e5eaf1;
-  border-radius: 6px;
-  background: #fbfcfe;
-}
-
-.agent-index {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 6px;
-  background: #e8f5f3;
-  color: #0f766e;
-  font-weight: 760;
-}
-
-.agent-title {
-  color: #17202a;
-  font-weight: 750;
-}
-
-.agent-body p {
-  margin: 6px 0 10px;
-  color: #667085;
-  line-height: 1.65;
-}
-
-.agent-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.agent-output {
-  padding: 8px 10px;
-  border-left: 3px solid #0f766e;
-  background: #ffffff;
-  color: #344054;
-  font-size: 13px;
-}
-
 /* 回到顶部按钮 */
 .back-top-button {
   width: 50px;
@@ -1686,13 +1533,6 @@ const drawRoutes = (AMap: any, attractions: any[]) => {
     grid-template-columns: 1fr;
   }
 
-  .agent-report-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .agent-report-head {
-    flex-direction: column;
-  }
 }
 
 /* Modern redesign overrides */
