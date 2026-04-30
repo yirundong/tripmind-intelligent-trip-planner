@@ -310,11 +310,6 @@ class AdminUserSummary(BaseModel):
     created_at: str
 
 
-class AdminUserRoleUpdate(BaseModel):
-    """管理员角色变更请求"""
-    is_admin: bool
-
-
 class AdminUserActiveUpdate(BaseModel):
     """用户启停请求"""
     is_active: bool

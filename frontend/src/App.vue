@@ -11,14 +11,7 @@
           <span>TripMind Admin</span>
         </RouterLink>
 
-        <nav class="admin-nav">
-          <a href="#admin-overview">系统概览</a>
-          <a href="#admin-tasks">任务监控</a>
-          <a href="#admin-users">用户管理</a>
-        </nav>
-
         <a-space>
-          <RouterLink class="nav-link" to="/dashboard">返回前台</RouterLink>
           <span style="color: #667085">{{ userName }}</span>
           <a-button @click="logout">退出</a-button>
         </a-space>

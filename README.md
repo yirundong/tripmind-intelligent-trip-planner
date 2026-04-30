@@ -102,7 +102,7 @@ DEFAULT_ADMIN_USERNAME=系统管理员
 DEFAULT_ADMIN_PASSWORD=ChangeMe123456
 ```
 
-普通用户注册不会获得管理员权限。管理员进入后台后，可以在用户列表中授予或取消其他用户的管理员权限；系统会阻止取消自己的管理员权限，并至少保留一个启用管理员。
+普通用户注册不会获得管理员权限。系统只保留环境变量中配置的内置管理员账号，其他账号均作为普通用户管理；后台可查看用户并停用异常账号，但不提供新增管理员入口。
 
 ## 一键启动
 
@@ -202,7 +202,7 @@ npm run dev
 | `GET /api/admin/stats` | 管理后台统计 |
 | `GET /api/admin/tasks` | 管理后台任务日志 |
 | `GET /api/admin/users` | 管理后台用户列表 |
-| `PATCH /api/admin/users/{id}/role` | 授予或取消管理员权限 |
+| `PATCH /api/admin/users/{id}/active` | 启用或停用普通用户 |
 
 ## 数据库
 

@@ -59,34 +59,12 @@ a {
   height: 64px;
   padding: 0 28px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto;
   gap: 24px;
   align-items: center;
+  justify-content: space-between;
   background: #ffffff;
   border-bottom: 1px solid var(--line);
-}
-
-.admin-nav {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-nav a {
-  height: 36px;
-  padding: 0 14px;
-  border-radius: var(--radius-sm);
-  display: inline-flex;
-  align-items: center;
-  color: var(--muted);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.admin-nav a:hover {
-  color: var(--primary);
-  background: #e8f5f3;
 }
 
 .brand {
@@ -391,8 +369,7 @@ a {
     align-items: flex-start;
   }
 
-  .app-nav,
-  .admin-nav {
+  .app-nav {
     flex-wrap: wrap;
     justify-content: flex-start;
   }

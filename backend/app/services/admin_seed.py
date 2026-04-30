@@ -56,6 +56,14 @@ def seed_default_admin() -> None:
                 print(f"✅ 默认管理员已修正: {email}")
             else:
                 print(f"✅ 默认管理员已存在: {email}")
+            demoted_count = (
+                db.query(User)
+                .filter(User.email != email, User.is_admin.is_(True))
+                .update({User.is_admin: False}, synchronize_session=False)
+            )
+            if demoted_count:
+                db.commit()
+                print(f"✅ 已收敛管理员账号数量，仅保留默认管理员: {email}")
             return
 
         user = User(
@@ -66,6 +74,11 @@ def seed_default_admin() -> None:
             is_admin=True,
         )
         db.add(user)
+        db.commit()
+        db.query(User).filter(User.email != email, User.is_admin.is_(True)).update(
+            {User.is_admin: False},
+            synchronize_session=False,
+        )
         db.commit()
         print(f"✅ 默认管理员已创建: {email}")
     except IntegrityError:

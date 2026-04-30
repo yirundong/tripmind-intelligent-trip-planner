@@ -18,7 +18,7 @@
     </div>
 
     <a-spin :spinning="loading">
-      <div id="admin-overview" class="metric-grid admin-metrics">
+      <div class="metric-grid admin-metrics">
         <div class="metric-card">
           <div class="metric-label">用户数</div>
           <div class="metric-value">{{ stats?.user_count || 0 }}</div>
@@ -76,7 +76,7 @@
         <a-empty v-else description="暂无城市数据" />
       </section>
 
-      <section id="admin-tasks" class="content-panel" style="margin-bottom: 18px">
+      <section class="content-panel" style="margin-bottom: 18px">
         <div class="admin-section-head">
           <div>
             <h2 class="section-title-modern">任务日志</h2>
@@ -98,14 +98,14 @@
         </a-table>
       </section>
 
-      <section id="admin-users" class="content-panel">
+      <section class="content-panel">
         <div class="admin-section-head">
           <div>
             <h2 class="section-title-modern">用户管理</h2>
-            <p>检索用户、调整管理员权限，并停用异常账号。</p>
+            <p>检索用户，并停用异常账号。管理员账号由系统内置，不在后台增删。</p>
           </div>
           <div class="user-admin-stats">
-            <a-tag color="green">管理员 {{ adminUserCount }}</a-tag>
+            <a-tag color="green">系统管理员 {{ adminUserCount }}</a-tag>
             <a-tag color="blue">普通用户 {{ normalUserCount }}</a-tag>
             <a-tag color="red">停用 {{ inactiveUserCount }}</a-tag>
           </div>
@@ -139,23 +139,8 @@
               <a-tag :color="record.is_active ? 'green' : 'red'">{{ record.is_active ? '启用' : '停用' }}</a-tag>
             </template>
             <template v-else-if="column.key === 'action'">
-              <a-space>
-                <a-popconfirm
-                  :title="record.is_admin ? '确认取消该用户的管理员权限？' : '确认将该用户设为管理员？'"
-                  ok-text="确认"
-                  cancel-text="取消"
-                  @confirm="toggleAdminRole(record)"
-                >
-                  <a-button
-                    size="small"
-                    :type="record.is_admin ? 'default' : 'primary'"
-                    :danger="record.is_admin"
-                    :loading="roleChangingId === record.id"
-                    :disabled="record.id === currentUserId && record.is_admin"
-                  >
-                    {{ record.is_admin ? '取消管理员' : '设为管理员' }}
-                  </a-button>
-                </a-popconfirm>
+              <span v-if="record.is_admin" class="muted-action">内置管理员</span>
+              <a-space v-else>
                 <a-popconfirm
                   :title="record.is_active ? '确认停用该用户？停用后将无法登录。' : '确认启用该用户？'"
                   ok-text="确认"
@@ -166,7 +151,6 @@
                     size="small"
                     :danger="record.is_active"
                     :loading="activeChangingId === record.id"
-                    :disabled="record.id === currentUserId && record.is_active"
                   >
                     {{ record.is_active ? '停用' : '启用' }}
                   </a-button>
@@ -187,14 +171,11 @@ import {
   fetchAdminStats,
   fetchAdminTasks,
   fetchAdminUsers,
-  getStoredUser,
-  updateAdminUserActive,
-  updateAdminUserRole
+  updateAdminUserActive
 } from '@/services/api'
 import type { AdminStats, AdminTaskSummary, AdminUserSummary } from '@/types'
 
 const loading = ref(false)
-const roleChangingId = ref<number | null>(null)
 const activeChangingId = ref<number | null>(null)
 const taskStatus = ref<string | undefined>()
 const userKeyword = ref('')
@@ -203,8 +184,6 @@ const activeFilter = ref<'all' | 'active' | 'inactive'>('all')
 const stats = ref<AdminStats | null>(null)
 const tasks = ref<AdminTaskSummary[]>([])
 const users = ref<AdminUserSummary[]>([])
-const currentUserId = getStoredUser()?.id
-
 const taskColumns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 70 },
   { title: '用户', dataIndex: 'username', key: 'username' },
@@ -224,7 +203,7 @@ const userColumns = [
   { title: '状态', key: 'active' },
   { title: '行程数', dataIndex: 'trip_count', key: 'trip_count' },
   { title: '注册时间', dataIndex: 'created_at', key: 'created_at' },
-  { title: '操作', key: 'action', width: 260 }
+  { title: '操作', key: 'action', width: 120 }
 ]
 
 const adminUserCount = computed(() => users.value.filter(user => user.is_admin).length)
@@ -298,19 +277,6 @@ const loadAll = async () => {
   }
 }
 
-const toggleAdminRole = async (record: AdminUserSummary) => {
-  roleChangingId.value = record.id
-  try {
-    const updated = await updateAdminUserRole(record.id, !record.is_admin)
-    users.value = users.value.map(user => (user.id === updated.id ? updated : user))
-    message.success(updated.is_admin ? '已设为管理员' : '已取消管理员权限')
-  } catch (error: any) {
-    message.error(error.response?.data?.detail || '管理员权限更新失败')
-  } finally {
-    roleChangingId.value = null
-  }
-}
-
 const toggleActiveStatus = async (record: AdminUserSummary) => {
   activeChangingId.value = record.id
   try {
@@ -373,6 +339,10 @@ onMounted(loadAll)
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
+}
+
+.muted-action {
+  color: #98a2b3;
 }
 
 .error-text {

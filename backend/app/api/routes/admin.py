@@ -14,7 +14,6 @@ from ...models.schemas import (
     AdminStats,
     AdminTaskSummary,
     AdminUserActiveUpdate,
-    AdminUserRoleUpdate,
     AdminUserSummary,
 )
 
@@ -125,32 +124,6 @@ async def list_admin_users(
     return result
 
 
-@router.patch("/users/{user_id}/role", response_model=AdminUserSummary, summary="设置管理员权限")
-async def update_user_admin_role(
-    user_id: int,
-    payload: AdminUserRoleUpdate,
-    current_user: User = Depends(require_admin),
-    db: Session = Depends(get_db),
-):
-    """授予或取消用户的管理员权限。"""
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="用户不存在")
-
-    if user.id == current_user.id and not payload.is_admin:
-        raise HTTPException(status_code=400, detail="不能取消自己的管理员权限")
-
-    if user.is_admin and not payload.is_admin:
-        admin_count = db.query(User).filter(User.is_admin.is_(True), User.is_active.is_(True)).count()
-        if admin_count <= 1:
-            raise HTTPException(status_code=400, detail="系统至少需要保留一个启用的管理员")
-
-    user.is_admin = payload.is_admin
-    db.commit()
-    db.refresh(user)
-    return to_admin_user_summary(db, user)
-
-
 @router.patch("/users/{user_id}/active", response_model=AdminUserSummary, summary="启用或停用用户")
 async def update_user_active_status(
     user_id: int,
@@ -163,13 +136,8 @@ async def update_user_active_status(
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在")
 
-    if user.id == current_user.id and not payload.is_active:
-        raise HTTPException(status_code=400, detail="不能停用自己的账号")
-
-    if user.is_admin and user.is_active and not payload.is_active:
-        admin_count = db.query(User).filter(User.is_admin.is_(True), User.is_active.is_(True)).count()
-        if admin_count <= 1:
-            raise HTTPException(status_code=400, detail="系统至少需要保留一个启用的管理员")
+    if user.is_admin:
+        raise HTTPException(status_code=400, detail="系统内置管理员不支持停用")
 
     user.is_active = payload.is_active
     db.commit()
