@@ -116,10 +116,23 @@ DEFAULT_ADMIN_PASSWORD=ChangeMe123456
 psql -U postgres -f scripts\init_postgres.sql
 ```
 
+如果没有安装原生 PostgreSQL，也可以使用 Docker 启动本地数据库：
+
+```powershell
+docker run -d --name tripmind-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -v tripmind-postgres-data:/var/lib/postgresql/data postgres:16-alpine
+Get-Content -Raw scripts\init_postgres.sql | docker exec -i tripmind-postgres psql -U postgres -f -
+```
+
+之后重启电脑或 Docker 后，只需要重新启动容器：
+
+```powershell
+docker start tripmind-postgres
+```
+
 默认连接地址为：
 
 ```text
-postgresql+psycopg://tripmind:tripmind123@localhost:5432/tripmind
+postgresql+psycopg://tripmind:tripmind123@127.0.0.1:5432/tripmind
 ```
 
 如果你修改了数据库用户名、密码或库名，需要同步修改 `backend/.env` 中的 `DATABASE_URL`。
@@ -233,7 +246,7 @@ psql -U postgres -f scripts\init_postgres.sql
 后端连接配置位于 `backend/.env`：
 
 ```text
-DATABASE_URL=postgresql+psycopg://tripmind:tripmind123@localhost:5432/tripmind
+DATABASE_URL=postgresql+psycopg://tripmind:tripmind123@127.0.0.1:5432/tripmind
 ```
 
 核心表：

@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
 
     # 数据库和认证配置
-    database_url: str = "postgresql+psycopg://tripmind:tripmind123@localhost:5432/tripmind"
+    database_url: str = "postgresql+psycopg://tripmind:tripmind123@127.0.0.1:5432/tripmind"
     jwt_secret_key: str = "change-this-secret-in-production"
     jwt_expire_minutes: int = 60 * 24 * 7
 
