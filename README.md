@@ -205,6 +205,23 @@ npm run dev
 
 如果未来部署到多人长期使用环境，可以迁移到 MySQL 或 PostgreSQL。毕业设计演示阶段 SQLite 已能体现持久化和管理后台能力。
 
+## Netlify 部署
+
+仓库根目录已经包含 `netlify.toml`，Netlify 会进入 `frontend` 目录执行构建，并发布 `frontend/dist`。
+
+```bash
+npx netlify-cli deploy --build
+npx netlify-cli deploy --build --prod
+```
+
+Netlify 适合部署 Vue 前端。FastAPI 后端需要单独部署到 Render、Railway、服务器或云函数平台，然后在 Netlify 站点环境变量中配置：
+
+```text
+VITE_API_BASE_URL=https://your-backend.example.com
+VITE_AMAP_WEB_JS_KEY=你的高德Web端Key
+VITE_AMAP_SECURITY_JS_CODE=你的高德安全密钥
+```
+
 ## 多 Agent 流程
 
 ```mermaid

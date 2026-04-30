@@ -43,3 +43,6 @@ dist/
 Thumbs.db
 *.swp
 *.swo
+
+# Local Netlify folder
+.netlify
