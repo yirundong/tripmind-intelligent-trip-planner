@@ -4,7 +4,7 @@
       <div>
         <div class="page-kicker">ROUTE</div>
         <h1 class="page-title-modern">路线规划</h1>
-        <p class="page-description">调用真实地图路线服务，查询两地之间的距离、耗时和交通描述。</p>
+        <p class="page-description">调用真实地图路线服务，查询两地之间的距离、耗时，并在地图上展示路径。</p>
       </div>
     </div>
 
@@ -65,40 +65,37 @@
               <strong>{{ routeTypeText(route.route_type) }}</strong>
             </div>
           </div>
-
-          <a-divider />
-          <div class="route-path">
-            <div class="path-point start">起</div>
-            <div>
-              <div class="path-title">{{ form.origin_address }}</div>
-              <div class="path-subtitle">{{ form.origin_city || '未指定城市' }}</div>
-            </div>
-            <div class="path-line"></div>
-            <div class="path-point end">终</div>
-            <div>
-              <div class="path-title">{{ form.destination_address }}</div>
-              <div class="path-subtitle">{{ form.destination_city || form.origin_city || '未指定城市' }}</div>
-            </div>
-          </div>
-
-          <a-divider />
-          <div class="route-description">{{ route.description }}</div>
         </template>
 
-        <div v-else class="empty-state">输入起点和终点后开始规划路线。</div>
+        <div class="route-map-card" :class="{ 'is-empty': !route }">
+          <div id="route-map" class="route-map"></div>
+          <div v-if="mapError || !route" class="map-tip">
+            {{ mapError || '输入起点和终点后，系统会在这里展示路线地图。' }}
+          </div>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
+import AMapLoader from '@amap/amap-jsapi-loader'
 import { planRoute } from '@/services/api'
 import type { RouteInfo, RouteRequest } from '@/types'
 
+declare global {
+  interface Window {
+    _AMapSecurityConfig?: {
+      securityJsCode: string
+    }
+  }
+}
+
 const loading = ref(false)
 const route = ref<RouteInfo | null>(null)
+const mapError = ref('')
 
 const form = reactive<RouteRequest>({
   origin_address: '故宫博物院',
@@ -107,6 +104,10 @@ const form = reactive<RouteRequest>({
   destination_city: '北京',
   route_type: 'driving'
 })
+
+let map: any = null
+let AMapRef: any = null
+let routePlanner: any = null
 
 const routeTypeText = (type: string) => {
   const map: Record<string, string> = {
@@ -132,9 +133,85 @@ const formatDuration = (seconds: number) => {
   return `${minutes}分钟`
 }
 
+const initMap = async () => {
+  if (map && AMapRef) return true
+
+  const jsApiKey = import.meta.env.VITE_AMAP_WEB_JS_KEY?.trim()
+  const securityJsCode = import.meta.env.VITE_AMAP_SECURITY_JS_CODE?.trim()
+  if (!jsApiKey) {
+    mapError.value = '未配置高德 JS API Key，暂时无法显示路线地图'
+    return false
+  }
+
+  if (securityJsCode) {
+    window._AMapSecurityConfig = { securityJsCode }
+  }
+
+  AMapRef = await AMapLoader.load({
+    key: jsApiKey,
+    version: '2.0',
+    plugins: ['AMap.Driving', 'AMap.Walking', 'AMap.Transfer']
+  })
+
+  map = new AMapRef.Map('route-map', {
+    zoom: 12,
+    center: [116.397128, 39.916527],
+    resizeEnable: true,
+    viewMode: '3D'
+  })
+  return true
+}
+
+const clearRouteMap = () => {
+  if (routePlanner?.clear) {
+    routePlanner.clear()
+  }
+  routePlanner = null
+  mapError.value = ''
+}
+
+const renderRouteMap = async () => {
+  await nextTick()
+  clearRouteMap()
+  const available = await initMap()
+  if (!available || !map || !AMapRef) return
+
+  map.resize()
+  const origin = {
+    keyword: form.origin_address,
+    city: form.origin_city || undefined
+  }
+  const destination = {
+    keyword: form.destination_address,
+    city: form.destination_city || form.origin_city || undefined
+  }
+
+  const callback = (status: string, result: any) => {
+    if (status !== 'complete') {
+      console.warn('高德路线地图绘制失败:', result)
+      mapError.value = '路线数据已返回，但地图暂时无法绘制，请检查地点名称或城市。'
+    }
+  }
+
+  if (form.route_type === 'transit') {
+    routePlanner = new AMapRef.Transfer({
+      map,
+      city: form.origin_city || form.destination_city || '',
+      cityd: form.destination_city || form.origin_city || ''
+    })
+  } else if (form.route_type === 'walking') {
+    routePlanner = new AMapRef.Walking({ map })
+  } else {
+    routePlanner = new AMapRef.Driving({ map })
+  }
+
+  routePlanner.search([origin, destination], callback)
+}
+
 const submit = async () => {
   loading.value = true
   route.value = null
+  clearRouteMap()
   try {
     const response = await planRoute({
       ...form,
@@ -145,6 +222,7 @@ const submit = async () => {
       return
     }
     route.value = response.data
+    await renderRouteMap()
     message.success('路线规划成功')
   } catch (error: any) {
     message.error(error.response?.data?.detail || error.message || '路线规划失败')
@@ -152,6 +230,10 @@ const submit = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  nextTick(initMap)
+})
 </script>
 
 <style scoped>
@@ -187,56 +269,29 @@ const submit = async () => {
   font-size: 26px;
 }
 
-.route-path {
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 8px 14px;
-  align-items: center;
-}
-
-.path-point {
-  width: 34px;
-  height: 34px;
-  border-radius: 4px;
-  display: grid;
-  place-items: center;
-  color: #ffffff;
-  font-weight: 800;
-}
-
-.path-point.start {
-  background: #0f766e;
-}
-
-.path-point.end {
-  background: #2563eb;
-}
-
-.path-line {
-  width: 2px;
-  height: 52px;
-  margin-left: 16px;
-  background: #cde7e3;
-}
-
-.path-title {
-  color: #17202a;
-  font-weight: 750;
-}
-
-.path-subtitle {
-  margin-top: 4px;
-  color: #667085;
-  font-size: 13px;
-}
-
-.route-description {
-  padding: 18px;
+.route-map-card {
+  margin-top: 18px;
+  border: 1px solid #e5eaf1;
   border-radius: 8px;
+  overflow: hidden;
   background: #f9fbfd;
-  color: #344054;
-  line-height: 1.8;
-  white-space: pre-wrap;
+}
+
+.route-map {
+  width: 100%;
+  height: 420px;
+}
+
+.route-map-card.is-empty .route-map {
+  background: linear-gradient(135deg, #eef7f6 0%, #f8fafc 100%);
+}
+
+.map-tip {
+  padding: 12px 16px;
+  border-top: 1px solid #e5eaf1;
+  color: #667085;
+  background: #ffffff;
+  font-size: 14px;
 }
 
 @media (max-width: 980px) {
@@ -246,6 +301,10 @@ const submit = async () => {
 
   .route-summary {
     grid-template-columns: 1fr;
+  }
+
+  .route-map {
+    height: 360px;
   }
 }
 </style>
