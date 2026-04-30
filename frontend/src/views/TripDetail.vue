@@ -54,7 +54,7 @@
               <a-list :data-source="day.attractions" bordered>
                 <template #renderItem="{ item }">
                   <a-list-item>
-                    <a-list-item-meta :title="item.name" :description="`${item.address} · ${item.visit_duration}分钟`" />
+                    <a-list-item-meta :title="item.name" :description="attractionDescription(item)" />
                     <a-button size="small" @click="favorite(item)">收藏</a-button>
                   </a-list-item>
                 </template>
@@ -103,6 +103,14 @@ const saveMeta = async () => {
   } finally {
     saving.value = false
   }
+}
+
+const attractionDescription = (item: Attraction) => {
+  const parts = [item.address || '暂无地址']
+  if (item.visit_duration) {
+    parts.push(`建议停留 ${item.visit_duration} 分钟`)
+  }
+  return parts.join(' · ')
 }
 
 const favorite = async (item: Attraction) => {

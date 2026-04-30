@@ -4,7 +4,7 @@
       <div>
         <div class="page-kicker">TRIPS</div>
         <h1 class="page-title-modern">我的行程</h1>
-        <p class="page-description">管理已保存、草稿和复制出来的旅行计划。</p>
+        <p class="page-description">管理已保存和草稿旅行计划。</p>
       </div>
       <RouterLink to="/">
         <a-button type="primary" size="large">新建规划</a-button>
@@ -36,7 +36,6 @@
           </RouterLink>
           <a-divider style="margin: 14px 0" />
           <a-space>
-            <a-button size="small" @click="copyTrip(trip.id)">复制</a-button>
             <a-popconfirm title="确认删除这个行程？" @confirm="removeTrip(trip.id)">
               <a-button size="small" danger>删除</a-button>
             </a-popconfirm>
@@ -50,12 +49,11 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { message } from 'ant-design-vue'
-import { deleteTrip, duplicateTrip, fetchTrips } from '@/services/api'
+import { deleteTrip, fetchTrips } from '@/services/api'
 import type { SavedTripSummary } from '@/types'
 
-const router = useRouter()
 const loading = ref(false)
 const trips = ref<SavedTripSummary[]>([])
 const filters = reactive<{ city?: string; status?: string }>({})
@@ -74,12 +72,6 @@ const loadTrips = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const copyTrip = async (id: number) => {
-  const copied = await duplicateTrip(id)
-  message.success('已复制为草稿')
-  router.push(`/trips/${copied.id}`)
 }
 
 const removeTrip = async (id: number) => {

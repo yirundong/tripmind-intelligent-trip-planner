@@ -50,6 +50,24 @@ def _update_task(db: Session, task: TripPlanTask, *, status: str, progress: int,
     db.refresh(task)
 
 
+def _update_task_by_id(task_id: int, *, status: str, progress: int, stage: str, error_message: str = "", trip_id: int | None = None):
+    """用独立会话更新任务状态，避免后台工作流并发回调共享同一个 Session。"""
+    db = SessionLocal()
+    try:
+        task = db.query(TripPlanTask).filter(TripPlanTask.id == task_id).first()
+        if not task:
+            return
+        task.status = status
+        task.progress = progress
+        task.stage = stage
+        task.error_message = error_message
+        if trip_id is not None:
+            task.trip_id = trip_id
+        db.commit()
+    finally:
+        db.close()
+
+
 def _run_trip_plan_task(task_id: int):
     """后台线程执行旅行规划任务，并把阶段进度持续落库。"""
     db = SessionLocal()
@@ -57,52 +75,51 @@ def _run_trip_plan_task(task_id: int):
         task = db.query(TripPlanTask).filter(TripPlanTask.id == task_id).first()
         if not task:
             return
+        request_data = task.request_data
+        user_id = task.user_id
+    finally:
+        db.close()
 
-        _update_task(db, task, status="running", progress=5, stage="任务启动: 初始化智能体工作流")
-        request = TripRequest(**json.loads(task.request_data))
+    try:
+        _update_task_by_id(task_id, status="running", progress=5, stage="任务启动: 初始化智能体工作流")
+        request = TripRequest(**json.loads(request_data))
 
         def update_progress(progress: int, stage: str):
-            current_task = db.query(TripPlanTask).filter(TripPlanTask.id == task_id).first()
-            if current_task:
-                _update_task(db, current_task, status="running", progress=progress, stage=stage)
+            _update_task_by_id(task_id, status="running", progress=progress, stage=stage)
 
         agent = get_trip_planner_agent()
         trip_plan = agent.plan_trip(request, progress_callback=update_progress)
 
-        task = db.query(TripPlanTask).filter(TripPlanTask.id == task_id).first()
-        if not task:
-            return
-        _update_task(db, task, status="running", progress=94, stage="数据保存: 写入用户行程库")
-        record = TripPlanRecord(
-            user_id=task.user_id,
-            title=f"{trip_plan.city}{trip_plan.start_date}旅行计划",
-            city=trip_plan.city,
-            start_date=trip_plan.start_date,
-            end_date=trip_plan.end_date,
-            travel_days=len(trip_plan.days),
-            status="saved",
-            request_data=json.dumps(request.model_dump(), ensure_ascii=False),
-            plan_data=json.dumps(trip_plan.model_dump(), ensure_ascii=False),
-        )
-        db.add(record)
-        db.commit()
-        db.refresh(record)
-
-        task.trip_id = record.id
-        _update_task(db, task, status="succeeded", progress=100, stage="行程生成完成")
-    except Exception as exc:
-        task = db.query(TripPlanTask).filter(TripPlanTask.id == task_id).first()
-        if task:
-            _update_task(
-                db,
-                task,
-                status="failed",
-                progress=100,
-                stage="行程生成失败",
-                error_message=str(exc),
+        _update_task_by_id(task_id, status="running", progress=94, stage="数据保存: 写入用户行程库")
+        db = SessionLocal()
+        try:
+            record = TripPlanRecord(
+                user_id=user_id,
+                title=f"{trip_plan.city}{trip_plan.start_date}旅行计划",
+                city=trip_plan.city,
+                start_date=trip_plan.start_date,
+                end_date=trip_plan.end_date,
+                travel_days=len(trip_plan.days),
+                status="saved",
+                request_data=json.dumps(request.model_dump(), ensure_ascii=False),
+                plan_data=json.dumps(trip_plan.model_dump(), ensure_ascii=False),
             )
-    finally:
-        db.close()
+            db.add(record)
+            db.commit()
+            db.refresh(record)
+            record_id = record.id
+        finally:
+            db.close()
+
+        _update_task_by_id(task_id, status="succeeded", progress=100, stage="行程生成完成", trip_id=record_id)
+    except Exception as exc:
+        _update_task_by_id(
+            task_id,
+            status="failed",
+            progress=100,
+            stage="行程生成失败",
+            error_message=str(exc),
+        )
 
 
 @router.post(

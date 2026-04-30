@@ -24,11 +24,6 @@
                 @search="search"
               />
             </a-form-item>
-            <div class="quick-tags">
-              <a-button v-for="keyword in quickKeywords" :key="keyword" size="small" @click="quickSearch(keyword)">
-                {{ keyword }}
-              </a-button>
-            </div>
           </a-form>
         </div>
 
@@ -64,6 +59,12 @@
             <a-descriptions-item label="经度">{{ selectedPoi.location?.longitude || '-' }}</a-descriptions-item>
             <a-descriptions-item label="纬度">{{ selectedPoi.location?.latitude || '-' }}</a-descriptions-item>
           </a-descriptions>
+          <a-textarea
+            v-model:value="favoriteNotes"
+            class="favorite-notes"
+            :rows="3"
+            placeholder="添加收藏备注，例如：适合上午去、想重点参观、朋友推荐"
+          />
           <a-button type="primary" block style="margin-top: 14px" @click="favorite(selectedPoi)">加入收藏</a-button>
         </aside>
       </section>
@@ -101,7 +102,7 @@ const mapReady = ref(false)
 const selectedIndex = ref(-1)
 const selectedPoi = ref<PoiItem | null>(null)
 const results = ref<PoiItem[]>([])
-const quickKeywords = ['景点', '博物馆', '美食', '酒店', '商圈', '公园']
+const favoriteNotes = ref('')
 const query = reactive({
   city: '北京',
   keywords: '博物馆'
@@ -196,14 +197,10 @@ const search = async () => {
   }
 }
 
-const quickSearch = (keyword: string) => {
-  query.keywords = keyword
-  search()
-}
-
 const focusPoi = async (item: PoiItem, index: number) => {
   selectedIndex.value = index
   selectedPoi.value = item
+  favoriteNotes.value = ''
   await initMap()
   if (!map || !AMapRef || !item.location) return
 
@@ -227,8 +224,9 @@ const favorite = async (item: PoiItem) => {
     category: item.type || '景点',
     longitude: String(item.location?.longitude || ''),
     latitude: String(item.location?.latitude || ''),
-    notes: ''
+    notes: favoriteNotes.value.trim()
   })
+  favoriteNotes.value = ''
   message.success('已加入收藏')
 }
 
@@ -264,12 +262,6 @@ onMounted(() => {
   border-bottom: 1px solid #e5eaf1;
   border-radius: 8px 8px 0 0;
   padding: 18px;
-}
-
-.quick-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
 }
 
 .poi-list {
@@ -367,6 +359,10 @@ onMounted(() => {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.06em;
+}
+
+.favorite-notes {
+  margin-top: 14px;
 }
 
 :deep(.map-label) {
