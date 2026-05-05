@@ -49,7 +49,7 @@ intelligent-trip-planner/
 │   ├── package.json
 │   └── .env.example
 ├── docs/
-│   └── ARCHITECTURE.md          # 架构图、时序图、ER 图
+│   └── ARCHITECTURE.md          # 架构图、需求分析、实现说明与论文写作底稿
 ├── scripts/
 │   └── init_postgres.sql        # PostgreSQL 建库和授权脚本
 ├── start-dev.ps1                # Windows 一键启动脚本
@@ -292,7 +292,7 @@ flowchart LR
 - 管理后台可展示用户、任务、成功率和热门目的地。
 - 前端路由懒加载和手动分包优化构建结果。
 
-更详细的架构图、时序图和 ER 图见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+架构图、需求分析、核心实现说明、测试方案和论文写作底稿见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
 ## 常见问题
 
