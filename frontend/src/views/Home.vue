@@ -711,7 +711,8 @@ onMounted(applyFavoritePlanningContext)
 }
 
 .planner-layout {
-  max-width: 980px;
+  width: 100%;
+  max-width: 1360px;
 }
 
 .form-section,

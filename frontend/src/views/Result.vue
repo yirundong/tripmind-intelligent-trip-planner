@@ -352,8 +352,8 @@ import {
   SaveOutlined
 } from '@ant-design/icons-vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
-import type { TripPlan } from '@/types'
-import { API_BASE_URL, fetchTrip, updateTrip } from '@/services/api'
+import type { TripPlan, WeatherInfo } from '@/types'
+import { API_BASE_URL, fetchTrip, fetchWeather, updateTrip } from '@/services/api'
 
 declare global {
   interface Window {
@@ -382,6 +382,54 @@ const hotelCount = computed(() => {
   return tripPlan.value?.days.filter(day => Boolean(day.hotel || day.accommodation)).length || 0
 })
 
+const emptyWeatherForDate = (date: string): WeatherInfo => ({
+  date,
+  day_weather: '暂无预报',
+  night_weather: '暂无预报',
+  day_temp: 0,
+  night_temp: 0,
+  wind_direction: '暂无',
+  wind_power: '暂无'
+})
+
+const normalizeWeatherByTripDays = (plan: TripPlan, sourceWeather: WeatherInfo[] = []): WeatherInfo[] => {
+  const sourceByDate = new Map(sourceWeather.map(item => [item.date, item]))
+  const planByDate = new Map((plan.weather_info || []).map(item => [item.date, item]))
+
+  return plan.days.map(day => {
+    const weather = sourceByDate.get(day.date) || planByDate.get(day.date)
+    return weather ? { ...weather, date: day.date } : emptyWeatherForDate(day.date)
+  })
+}
+
+const hydrateMissingWeather = async () => {
+  if (!tripPlan.value) return
+
+  const expectedDates = tripPlan.value.days.map(day => day.date)
+  const currentDates = new Set((tripPlan.value.weather_info || []).map(item => item.date))
+  const needsHydration = expectedDates.some(date => !currentDates.has(date))
+
+  if (!needsHydration) {
+    tripPlan.value.weather_info = normalizeWeatherByTripDays(tripPlan.value)
+    return
+  }
+
+  try {
+    const weather = await fetchWeather(tripPlan.value.city)
+    tripPlan.value.weather_info = normalizeWeatherByTripDays(tripPlan.value, weather)
+    sessionStorage.setItem('tripPlan', JSON.stringify(tripPlan.value))
+
+    if (tripId.value) {
+      updateTrip(tripId.value, { plan_data: tripPlan.value }).catch(() => {
+        message.warning('天气已补齐，数据库同步失败')
+      })
+    }
+  } catch (error) {
+    console.error('补齐天气信息失败:', error)
+    tripPlan.value.weather_info = normalizeWeatherByTripDays(tripPlan.value)
+  }
+}
+
 onMounted(async () => {
   const data = sessionStorage.getItem('tripPlan')
   const storedTripId = Number(route.query.tripId || sessionStorage.getItem('tripId') || 0)
@@ -394,6 +442,7 @@ onMounted(async () => {
     sessionStorage.setItem('tripPlan', JSON.stringify(detail.plan_data))
   }
   if (!tripPlan.value) return
+  await hydrateMissingWeather()
   // 加载景点图片
   await loadAttractionPhotos()
   // 等待DOM渲染完成后初始化地图

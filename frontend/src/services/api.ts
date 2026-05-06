@@ -13,7 +13,9 @@ import type {
   TripFormData,
   TripPlan,
   TripPlanTask,
-  UserProfile
+  UserProfile,
+  WeatherInfo,
+  WeatherResponse
 } from '@/types'
 
 // 为空时走 Vite 开发代理；部署时通过 VITE_API_BASE_URL 指向后端服务。
@@ -126,6 +128,11 @@ export async function fetchTrip(id: number): Promise<SavedTripDetail> {
 export async function updateTrip(id: number, data: { title?: string; status?: string; notes?: string; plan_data?: TripPlan }): Promise<SavedTripDetail> {
   const response = await apiClient.put<SavedTripDetail>(`/api/trips/${id}`, data)
   return response.data
+}
+
+export async function fetchWeather(city: string): Promise<WeatherInfo[]> {
+  const response = await apiClient.get<WeatherResponse>('/api/map/weather', { params: { city } })
+  return response.data.data
 }
 
 export async function duplicateTrip(id: number): Promise<SavedTripDetail> {

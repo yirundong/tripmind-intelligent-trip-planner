@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 
-from ..models.schemas import TripPlan, TripRequest
+from ..models.schemas import TripPlan, TripRequest, WeatherInfo
 from ..services.llm_service import get_llm
 from ..tools.amap_tools import query_weather, search_attractions, search_hotels
 from .state import TripGraphState
@@ -22,7 +22,7 @@ PLANNER_SYSTEM_PROMPT = """你是智能旅行规划系统中的行程规划智�
 2. JSON必须符合TripPlan结构。
 3. 每天景点数量优先遵循用户输入的 attractions_per_day。
 4. 每天包含早餐、午餐、晚餐。
-5. weather_info尽量覆盖每天日期。
+5. weather_info必须覆盖每天日期。
 6. 预算字段必须包含景点、酒店、餐饮、交通和总计。
 """
 
@@ -169,7 +169,7 @@ class MultiAgentTripPlanner:
         print("🌤️ 节点 query_weather: 调用天气查询工具")
         self._emit_progress(state, 38, "天气查询: 获取目的地天气预报")
         results = self.tools["query_weather"].invoke({"city": request.city})
-        return {"weather_results": results[: max(request.travel_days, 1)]}
+        return {"weather_results": results}
 
     def _search_hotels_node(self, state: TripGraphState) -> Dict[str, Any]:
         request = state["request"]
@@ -199,6 +199,10 @@ class MultiAgentTripPlanner:
         self._emit_progress(state, 84, "结构校验: Pydantic校验TripPlan")
         try:
             trip_plan = self._parse_response(state.get("planner_response", ""))
+            trip_plan.weather_info = self._normalize_weather_info(
+                trip_plan,
+                state.get("weather_results", []),
+            )
             return {
                 "trip_plan": trip_plan,
                 "validation_error": "",
@@ -231,6 +235,58 @@ class MultiAgentTripPlanner:
         if state.get("needs_repair") and state.get("repair_attempts", 0) < 1:
             return "repair"
         return "end"
+
+    @staticmethod
+    def _weather_to_model(item: Any) -> WeatherInfo | None:
+        if isinstance(item, WeatherInfo):
+            return item
+        if isinstance(item, dict):
+            try:
+                return WeatherInfo(**item)
+            except Exception:
+                return None
+        return None
+
+    def _normalize_weather_info(
+        self,
+        trip_plan: TripPlan,
+        source_weather: List[Dict[str, Any]],
+    ) -> List[WeatherInfo]:
+        """Keep one weather entry per planned day, keyed by the day date."""
+        target_dates = [day.date for day in trip_plan.days if day.date]
+        if not target_dates:
+            return list(trip_plan.weather_info or [])
+
+        source_by_date: Dict[str, WeatherInfo] = {}
+        for item in source_weather:
+            weather = self._weather_to_model(item)
+            if weather and weather.date and weather.date not in source_by_date:
+                source_by_date[weather.date] = weather
+
+        plan_by_date: Dict[str, WeatherInfo] = {}
+        for item in trip_plan.weather_info or []:
+            weather = self._weather_to_model(item)
+            if weather and weather.date and weather.date not in plan_by_date:
+                plan_by_date[weather.date] = weather
+
+        normalized: List[WeatherInfo] = []
+        for date in target_dates:
+            weather = source_by_date.get(date) or plan_by_date.get(date)
+            if weather:
+                normalized.append(weather.model_copy(update={"date": date}))
+            else:
+                normalized.append(
+                    WeatherInfo(
+                        date=date,
+                        day_weather="暂无预报",
+                        night_weather="暂无预报",
+                        day_temp=0,
+                        night_temp=0,
+                        wind_direction="暂无",
+                        wind_power="暂无",
+                    )
+                )
+        return normalized
 
     def _build_planner_prompt(self, state: TripGraphState) -> str:
         request = state["request"]

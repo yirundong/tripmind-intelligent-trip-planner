@@ -66,6 +66,12 @@ export interface WeatherInfo {
   wind_power: string
 }
 
+export interface WeatherResponse {
+  success: boolean
+  message: string
+  data: WeatherInfo[]
+}
+
 export interface TripPlan {
   city: string
   start_date: string
