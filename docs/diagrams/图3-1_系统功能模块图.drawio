@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="系统功能模块图" id="modules">
+    <mxGraphModel dx="1300" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="450" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="n1" value="智能旅行规划系统" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="540" y="20" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="n2" value="用户管理模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n3" value="旅行规划模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="240" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n4" value="任务管理模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="450" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n5" value="数据获取模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="660" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n6" value="历史记录模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="870" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n7" value="系统管理模块" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="1080" y="130" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="n8" value="用户注册登录" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n9" value="用户登出" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n10" value="个人信息维护" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n11" value="请求标准化" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="250" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n12" value="并行数据采集" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="250" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n13" value="行程编排" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="250" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n14" value="结果校验与修复" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="250" y="358" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n15" value="任务创建" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="460" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n16" value="任务状态流转" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="460" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n17" value="任务状态查询" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="460" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n18" value="景点搜索" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="670" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n19" value="天气查询" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="670" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n20" value="酒店搜索" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="670" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n21" value="历史列表" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="880" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n22" value="详情查看" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="880" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n23" value="记录删除" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="880" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n24" value="全局配置" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1090" y="220" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n25" value="日志记录" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1090" y="266" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="n26" value="异常处理与权限控制" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1090" y="312" width="160" height="36" as="geometry"/></mxCell>
+        <mxCell id="e1" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="endArrow=none;html=1;" edge="1" parent="1" source="n1" target="n7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="endArrow=none;html=1;" edge="1" parent="1" source="n2" target="n8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="endArrow=none;html=1;" edge="1" parent="1" source="n2" target="n9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="endArrow=none;html=1;" edge="1" parent="1" source="n2" target="n10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="endArrow=none;html=1;" edge="1" parent="1" source="n3" target="n11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="endArrow=none;html=1;" edge="1" parent="1" source="n3" target="n12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="endArrow=none;html=1;" edge="1" parent="1" source="n3" target="n13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="endArrow=none;html=1;" edge="1" parent="1" source="n3" target="n14"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="endArrow=none;html=1;" edge="1" parent="1" source="n4" target="n15"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" style="endArrow=none;html=1;" edge="1" parent="1" source="n4" target="n16"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16" style="endArrow=none;html=1;" edge="1" parent="1" source="n4" target="n17"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e17" style="endArrow=none;html=1;" edge="1" parent="1" source="n5" target="n18"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e18" style="endArrow=none;html=1;" edge="1" parent="1" source="n5" target="n19"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e19" style="endArrow=none;html=1;" edge="1" parent="1" source="n5" target="n20"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e20" style="endArrow=none;html=1;" edge="1" parent="1" source="n6" target="n21"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e21" style="endArrow=none;html=1;" edge="1" parent="1" source="n6" target="n22"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e22" style="endArrow=none;html=1;" edge="1" parent="1" source="n6" target="n23"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e23" style="endArrow=none;html=1;" edge="1" parent="1" source="n7" target="n24"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e24" style="endArrow=none;html=1;" edge="1" parent="1" source="n7" target="n25"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e25" style="endArrow=none;html=1;" edge="1" parent="1" source="n7" target="n26"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
