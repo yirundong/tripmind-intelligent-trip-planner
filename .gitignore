@@ -43,3 +43,5 @@ dist/
 Thumbs.db
 *.swp
 *.swo
+# drawio auto-saved backup files
+**/.$*.bkp
