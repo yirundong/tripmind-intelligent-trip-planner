@@ -1,46 +1,46 @@
 <mxfile host="app.diagrams.net" type="device">
   <diagram name="行程历史管理活动图" id="actHist">
-    <mxGraphModel dx="900" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="1100" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="n1" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="430" y="20" width="20" height="20" as="geometry"/></mxCell>
-        <mxCell id="n2" value="用户进入历史页面" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="60" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="n3" value="前端携带令牌请求历史接口" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="320" y="120" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="n4" value="后端中间件校验令牌" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="180" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="n5" value="令牌有效？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="370" y="240" width="140" height="70" as="geometry"/></mxCell>
-        <mxCell id="n6" value="提示重新登录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="255" width="160" height="40" as="geometry"/></mxCell>
-        <mxCell id="n7" value="按用户身份查询数据库" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="340" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="n8" value="按时间倒序返回历史列表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="320" y="400" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="n9" value="用户选择操作" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="370" y="460" width="140" height="70" as="geometry"/></mxCell>
-        <mxCell id="n10" value="按task_id拉取行程详细数据" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="60" y="555" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="n11" value="渲染详情页" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="100" y="615" width="160" height="40" as="geometry"/></mxCell>
-        <mxCell id="n12" value="弹出二次确认弹窗" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="555" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="n13" value="用户确认？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="630" y="615" width="140" height="70" as="geometry"/></mxCell>
-        <mxCell id="n14" value="调用删除接口" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="620" y="710" width="160" height="40" as="geometry"/></mxCell>
-        <mxCell id="n15" value="后端校验归属并软删除" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="770" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="n16" value="前端刷新列表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="620" y="830" width="160" height="40" as="geometry"/></mxCell>
-        <mxCell id="n17" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="425" y="900" width="30" height="30" as="geometry"/></mxCell>
-        <mxCell id="n18" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="432" y="907" width="16" height="16" as="geometry"/></mxCell>
-        <mxCell id="g1" style="endArrow=classic;html=1;" edge="1" parent="1" source="n1" target="n2"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g2" style="endArrow=classic;html=1;" edge="1" parent="1" source="n2" target="n3"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g3" style="endArrow=classic;html=1;" edge="1" parent="1" source="n3" target="n4"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g4" style="endArrow=classic;html=1;" edge="1" parent="1" source="n4" target="n5"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g5" value="否" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="n5" target="n6"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g6" value="是" style="endArrow=classic;html=1;" edge="1" parent="1" source="n5" target="n7"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g7" style="endArrow=classic;html=1;" edge="1" parent="1" source="n7" target="n8"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g8" style="endArrow=classic;html=1;" edge="1" parent="1" source="n8" target="n9"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g9" value="查看详情" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="n9" target="n10"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g10" value="删除" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="n9" target="n12"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g11" style="endArrow=classic;html=1;" edge="1" parent="1" source="n10" target="n11"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g12" style="endArrow=classic;html=1;" edge="1" parent="1" source="n12" target="n13"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g13" value="是" style="endArrow=classic;html=1;" edge="1" parent="1" source="n13" target="n14"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g14" value="否" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="n13" target="n8"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g15" style="endArrow=classic;html=1;" edge="1" parent="1" source="n14" target="n15"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g16" style="endArrow=classic;html=1;" edge="1" parent="1" source="n15" target="n16"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g17" style="endArrow=classic;html=1;" edge="1" parent="1" source="n16" target="n17"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g18" style="endArrow=classic;html=1;" edge="1" parent="1" source="n11" target="n17"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="g19" style="endArrow=classic;html=1;" edge="1" parent="1" source="n6" target="n17"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="lu" value="用户" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="20" y="20" width="440" height="940" as="geometry"/></mxCell>
+        <mxCell id="ls" value="系统" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="480" y="20" width="500" height="940" as="geometry"/></mxCell>
+        <mxCell id="u_start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="210" y="50" width="20" height="20" as="geometry"/></mxCell>
+        <mxCell id="u1" value="进入历史行程页面" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="120" y="90" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="u_browse" value="浏览历史行程列表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="120" y="320" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="u_op" value="选择操作" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="140" y="390" width="160" height="70" as="geometry"/></mxCell>
+        <mxCell id="u_view" value="点击查看某条行程" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="20" y="500" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="u_view_done" value="查看行程详细安排" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="20" y="650" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="u_del_click" value="点击删除按钮" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="220" y="500" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="u_confirm" value="确认删除？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="240" y="650" width="160" height="70" as="geometry"/></mxCell>
+        <mxCell id="u_end_outer" value="" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="lu"><mxGeometry x="205" y="880" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="u_end_inner" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="212" y="887" width="16" height="16" as="geometry"/></mxCell>
+        <mxCell id="s_auth" value="识别用户身份" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="150" y="90" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="s_dec" value="身份有效？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="170" y="160" width="160" height="70" as="geometry"/></mxCell>
+        <mxCell id="s_login" value="提示重新登录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="350" y="175" width="140" height="40" as="geometry"/></mxCell>
+        <mxCell id="s_list" value="按时间倒序返回历史行程列表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="130" y="250" width="240" height="40" as="geometry"/></mxCell>
+        <mxCell id="s_detail" value="展示该条行程的详细安排" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="20" y="570" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="s_pop" value="弹出删除确认对话框" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="260" y="570" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="s_del" value="删除该条行程并刷新列表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="260" y="780" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="e1" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_start" target="u1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1;" edge="1" parent="1" source="u1" target="s_auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_auth" target="s_dec"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="否" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_dec" target="s_login"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_dec" target="s_list"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_login_end" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="s_login" target="u_end_outer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_list" target="u_browse"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_browse" target="u_op"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="查看详情" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_op" target="u_view"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="删除" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_op" target="u_del_click"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_view" target="s_detail"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_detail" target="u_view_done"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_view_done" target="u_end_outer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_del_click" target="s_pop"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_pop" target="u_confirm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" value="否" style="endArrow=classic;html=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_confirm" target="u_browse"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_confirm" target="s_del"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e17" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_del" target="u_end_outer"><mxGeometry relative="1" as="geometry"/></mxCell>
       </root>
     </mxGraphModel>
   </diagram>
