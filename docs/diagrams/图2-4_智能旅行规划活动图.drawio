@@ -1,38 +1,138 @@
 <mxfile host="app.diagrams.net" type="device">
   <diagram name="智能旅行规划活动图" id="actPlan">
-    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="900" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="lu" value="用户" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="20" y="20" width="380" height="840" as="geometry"/></mxCell>
-        <mxCell id="ls" value="系统" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="420" y="20" width="540" height="840" as="geometry"/></mxCell>
-        <mxCell id="u_start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="180" y="50" width="20" height="20" as="geometry"/></mxCell>
-        <mxCell id="u1" value="填写目的地、日期、人数、预算等旅行需求" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="60" y="90" width="260" height="50" as="geometry"/></mxCell>
-        <mxCell id="u2" value="提交规划请求" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="90" y="170" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u3" value="等待规划完成" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="90" y="350" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u4" value="查看生成的行程方案" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="90" y="730" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u_end_outer" value="" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="lu"><mxGeometry x="175" y="800" width="30" height="30" as="geometry"/></mxCell>
-        <mxCell id="u_end_inner" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="182" y="807" width="16" height="16" as="geometry"/></mxCell>
-        <mxCell id="s1" value="接收并启动规划任务" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="170" y="240" width="220" height="40" as="geometry"/></mxCell>
-        <mxCell id="s2" value="并行采集景点、天气、酒店等出行信息" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="150" y="320" width="260" height="50" as="geometry"/></mxCell>
-        <mxCell id="s3" value="综合采集到的信息生成行程方案" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="170" y="400" width="220" height="40" as="geometry"/></mxCell>
-        <mxCell id="s4" value="检查方案是否合理" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="180" y="470" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_dec" value="合理？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="200" y="540" width="160" height="70" as="geometry"/></mxCell>
-        <mxCell id="s_repair" value="对不合理之处进行修复" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="20" y="555" width="160" height="40" as="geometry"/></mxCell>
-        <mxCell id="s5" value="保存方案并通知用户" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="170" y="660" width="220" height="40" as="geometry"/></mxCell>
-        <mxCell id="e1" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_start" target="u1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e2" style="endArrow=classic;html=1;" edge="1" parent="1" source="u1" target="u2"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e3" style="endArrow=classic;html=1;" edge="1" parent="1" source="u2" target="s1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e4" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="s1" target="u3"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e5" style="endArrow=classic;html=1;" edge="1" parent="1" source="s1" target="s2"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e6" style="endArrow=classic;html=1;" edge="1" parent="1" source="s2" target="s3"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e7" style="endArrow=classic;html=1;" edge="1" parent="1" source="s3" target="s4"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e8" style="endArrow=classic;html=1;" edge="1" parent="1" source="s4" target="s_dec"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e9" value="否" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_dec" target="s_repair"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e10" value="重新检查" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="s_repair" target="s4"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e11" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_dec" target="s5"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e12" style="endArrow=classic;html=1;" edge="1" parent="1" source="s5" target="u4"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e13" style="endArrow=classic;html=1;" edge="1" parent="1" source="u4" target="u_end_outer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <!-- 垂直泳道 -->
+        <mxCell id="lu" value="用户" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="350" height="1320" as="geometry"/>
+        </mxCell>
+        <mxCell id="ls" value="系统" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="420" y="20" width="350" height="1320" as="geometry"/>
+        </mxCell>
+        <!-- ====== 用户节点 ====== -->
+        <mxCell id="u_start" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1" parent="lu">
+          <mxGeometry x="165" y="50" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="u1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="填写目的地、日期、&#xa;人数、预算等旅行需求" vertex="1" parent="lu">
+          <mxGeometry x="65" y="110" width="220" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="u2" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="提交规划请求" vertex="1" parent="lu">
+          <mxGeometry x="75" y="210" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="u3" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="等待规划完成" vertex="1" parent="lu">
+          <mxGeometry x="75" y="380" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="u4" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="查看生成的行程方案" vertex="1" parent="lu">
+          <mxGeometry x="75" y="1180" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="u_end_outer" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" value="" vertex="1" parent="lu">
+          <mxGeometry x="160" y="1270" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="u_end_inner" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1" parent="lu">
+          <mxGeometry x="167" y="1277" width="16" height="16" as="geometry"/>
+        </mxCell>
+        <!-- ====== 系统节点 ====== -->
+        <mxCell id="s1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="接收并启动规划任务" vertex="1" parent="ls">
+          <mxGeometry x="75" y="300" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s2" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="并行采集景点、天气、&#xa;酒店等出行信息" vertex="1" parent="ls">
+          <mxGeometry x="65" y="460" width="220" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="综合信息生成行程方案" vertex="1" parent="ls">
+          <mxGeometry x="75" y="570" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s4" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="检查方案是否合理" vertex="1" parent="ls">
+          <mxGeometry x="75" y="680" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_dec" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" value="合理？" vertex="1" parent="ls">
+          <mxGeometry x="85" y="790" width="180" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_repair" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="对不合理之处进行修复" vertex="1" parent="ls">
+          <mxGeometry x="75" y="940" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s5" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="保存方案并通知用户" vertex="1" parent="ls">
+          <mxGeometry x="75" y="1100" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <!-- ====== 连线 ====== -->
+        <!-- 起始→填写 -->
+        <mxCell id="e1" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="u_start" target="u1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 填写→提交 -->
+        <mxCell id="e2" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="u1" target="u2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 提交→系统接收（跨泳道水平） -->
+        <mxCell id="e3" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="u2" target="s1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="250" />
+              <mxPoint x="405" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 系统接收→用户等待（跨泳道水平，虚线） -->
+        <mxCell id="e4" style="endArrow=classic;html=1;dashed=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="s1" target="u3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="340" />
+              <mxPoint x="405" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 系统接收→采集 -->
+        <mxCell id="e5" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s1" target="s2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 采集→生成 -->
+        <mxCell id="e6" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s2" target="s3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 生成→检查 -->
+        <mxCell id="e7" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s3" target="s4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 检查→判断 -->
+        <mxCell id="e8" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s4" target="s_dec">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 否→修复（向下） -->
+        <mxCell id="e9" value="否" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s_dec" target="s_repair">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- 修复→检查（沿右侧边缘向上回到检查） -->
+        <mxCell id="e10" value="重新检查" style="endArrow=classic;html=1;dashed=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="s_repair" target="s4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="980" />
+              <mxPoint x="750" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 是→保存（沿左侧边缘绕过修复节点） -->
+        <mxCell id="e11" value="是" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="s_dec" target="s5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="850" />
+              <mxPoint x="440" y="1140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 保存→用户查看（跨泳道水平） -->
+        <mxCell id="e12" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5" target="u4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="1140" />
+              <mxPoint x="405" y="1220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 查看→结束 -->
+        <mxCell id="e13" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="u4" target="u_end_outer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

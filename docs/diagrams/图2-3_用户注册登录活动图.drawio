@@ -1,46 +1,184 @@
-<mxfile host="app.diagrams.net" type="device">
+<mxfile host="Electron">
   <diagram name="用户注册登录活动图" id="actLogin">
-    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="900" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="lu" value="用户" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="20" y="20" width="460" height="840" as="geometry"/></mxCell>
-        <mxCell id="ls" value="系统" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="500" y="20" width="560" height="840" as="geometry"/></mxCell>
-        <mxCell id="u_start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="220" y="50" width="20" height="20" as="geometry"/></mxCell>
-        <mxCell id="u_visit" value="访问登录或注册页面" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="130" y="90" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u_dec" value="已有账号？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="140" y="160" width="180" height="70" as="geometry"/></mxCell>
-        <mxCell id="u_reg" value="填写用户名、邮箱与密码" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="20" y="280" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u_log" value="输入账号与密码" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="240" y="280" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u_home" value="进入系统首页" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="lu"><mxGeometry x="130" y="710" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="u_end_outer" value="" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="lu"><mxGeometry x="215" y="780" width="30" height="30" as="geometry"/></mxCell>
-        <mxCell id="u_end_inner" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lu"><mxGeometry x="222" y="787" width="16" height="16" as="geometry"/></mxCell>
-        <mxCell id="s_reg_check" value="校验信息合法性与账号是否被占用" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="10" y="350" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_reg_dec" value="可注册？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="40" y="410" width="180" height="70" as="geometry"/></mxCell>
-        <mxCell id="s_reg_err" value="提示账号已存在或信息无效" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="10" y="500" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_reg_ok" value="创建账号并自动登录" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="30" y="580" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_log_check" value="核对账号与密码" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="290" y="350" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_log_dec" value="正确？" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="330" y="410" width="160" height="70" as="geometry"/></mxCell>
-        <mxCell id="s_log_err" value="提示账号或密码错误" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="290" y="500" width="240" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_log_ok" value="识别用户身份" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="310" y="580" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="s_join" value="跳转至首页" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="ls"><mxGeometry x="170" y="650" width="200" height="40" as="geometry"/></mxCell>
-        <mxCell id="e1" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_start" target="u_visit"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e2" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_visit" target="u_dec"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e3" value="否（去注册）" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_dec" target="u_reg"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e4" value="是（去登录）" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="u_dec" target="u_log"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e5" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_reg" target="s_reg_check"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e6" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_reg_check" target="s_reg_dec"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e7" value="否" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="s_reg_dec" target="s_reg_err"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e8" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_reg_dec" target="s_reg_ok"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e9" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="s_reg_err" target="u_reg"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e10" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_reg_ok" target="s_join"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e11" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_log" target="s_log_check"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e12" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_log_check" target="s_log_dec"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e13" value="否" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="s_log_dec" target="s_log_err"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e14" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="s_log_dec" target="s_log_ok"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e15" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="s_log_err" target="u_log"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e16" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_log_ok" target="s_join"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e17" style="endArrow=classic;html=1;" edge="1" parent="1" source="s_join" target="u_home"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e18" style="endArrow=classic;html=1;" edge="1" parent="1" source="u_home" target="u_end_outer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- 垂直泳道：用户（左）、系统（右） -->
+        <mxCell id="lu" value="用户" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="350" height="1520" as="geometry" />
+        </mxCell>
+        <mxCell id="ls" value="系统" style="swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="420" y="20" width="350" height="1520" as="geometry" />
+        </mxCell>
+        <!-- ====== 用户泳道节点 ====== -->
+        <mxCell id="u_start" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1" parent="lu">
+          <mxGeometry x="165" y="50" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="u_visit" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="访问登录/注册页面" vertex="1" parent="lu">
+          <mxGeometry x="75" y="110" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_dec" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" value="已有账号？" vertex="1" parent="lu">
+          <mxGeometry x="85" y="200" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="u_reg" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="填写用户名、邮箱与密码" vertex="1" parent="lu">
+          <mxGeometry x="75" y="360" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_log" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="输入账号与密码" vertex="1" parent="lu">
+          <mxGeometry x="75" y="830" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_home" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="进入系统首页" vertex="1" parent="lu">
+          <mxGeometry x="75" y="1380" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_end_outer" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" value="" vertex="1" parent="lu">
+          <mxGeometry x="160" y="1470" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u_end_inner" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1" parent="lu">
+          <mxGeometry x="167" y="1477" width="16" height="16" as="geometry" />
+        </mxCell>
+        <!-- ====== 系统泳道节点 ====== -->
+        <!-- 注册验证区 -->
+        <mxCell id="s_reg_check" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="校验注册信息合法性" vertex="1" parent="ls">
+          <mxGeometry x="75" y="440" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_reg_dec" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" value="可注册？" vertex="1" parent="ls">
+          <mxGeometry x="85" y="530" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_reg_err" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="提示信息无效或账号已存在" vertex="1" parent="ls">
+          <mxGeometry x="75" y="670" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_reg_ok" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="创建账号并自动登录" vertex="1" parent="ls">
+          <mxGeometry x="75" y="760" width="200" height="40" as="geometry" />
+        </mxCell>
+        <!-- 登录验证区 -->
+        <mxCell id="s_log_check" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="核对账号与密码" vertex="1" parent="ls">
+          <mxGeometry x="75" y="910" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_log_dec" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;" value="正确？" vertex="1" parent="ls">
+          <mxGeometry x="85" y="1000" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_log_err" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="提示账号或密码错误" vertex="1" parent="ls">
+          <mxGeometry x="75" y="1140" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_log_ok" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="签发令牌，识别身份" vertex="1" parent="ls">
+          <mxGeometry x="75" y="1230" width="200" height="40" as="geometry" />
+        </mxCell>
+        <!-- 汇合 -->
+        <mxCell id="s_jump" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" value="跳转至首页" vertex="1" parent="ls">
+          <mxGeometry x="75" y="1330" width="200" height="40" as="geometry" />
+        </mxCell>
+        <!-- ====== 连线 ====== -->
+        <!-- 用户内部：起始→访问→判断 -->
+        <mxCell id="e1" edge="1" parent="1" source="u_start" target="u_visit" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="u_visit" target="u_dec" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 判断→注册（否，向下） -->
+        <mxCell id="e3" edge="1" parent="1" source="u_dec" target="u_reg" value="否" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 判断→登录（是，沿左侧边缘向下跳到登录） -->
+        <mxCell id="e4" edge="1" parent="1" source="u_dec" target="u_log" value="是" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="70" y="260" />
+              <mxPoint x="70" y="870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 注册→系统校验（水平跨泳道） -->
+        <mxCell id="e5" edge="1" parent="1" source="u_reg" target="s_reg_check" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="400" />
+              <mxPoint x="405" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 系统校验→判断可注册 -->
+        <mxCell id="e6" edge="1" parent="1" source="s_reg_check" target="s_reg_dec" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 不可注册→错误提示（否，向下） -->
+        <mxCell id="e7" edge="1" parent="1" source="s_reg_dec" target="s_reg_err" value="否" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 可注册→创建账号（是，沿右侧绕过错误提示） -->
+        <mxCell id="e8" edge="1" parent="1" source="s_reg_dec" target="s_reg_ok" value="是" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="590" />
+              <mxPoint x="750" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 错误提示→回到注册（虚线，沿左侧边缘向上） -->
+        <mxCell id="e9" edge="1" parent="1" source="s_reg_err" target="u_reg" style="endArrow=classic;html=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="710" />
+              <mxPoint x="405" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 创建账号→跳转首页 -->
+        <mxCell id="e10" edge="1" parent="1" source="s_reg_ok" target="s_jump" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 登录→系统核对（水平跨泳道） -->
+        <mxCell id="e11" edge="1" parent="1" source="u_log" target="s_log_check" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="870" />
+              <mxPoint x="405" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 系统核对→判断正确 -->
+        <mxCell id="e12" edge="1" parent="1" source="s_log_check" target="s_log_dec" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 不正确→错误提示（否，向下） -->
+        <mxCell id="e13" edge="1" parent="1" source="s_log_dec" target="s_log_err" value="否" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 正确→识别身份（是，沿右侧绕过错误提示） -->
+        <mxCell id="e14" edge="1" parent="1" source="s_log_dec" target="s_log_ok" value="是" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="1060" />
+              <mxPoint x="750" y="1270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 登录错误→回到登录（虚线，沿左侧边缘向上） -->
+        <mxCell id="e15" edge="1" parent="1" source="s_log_err" target="u_log" style="endArrow=classic;html=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="1180" />
+              <mxPoint x="405" y="870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 识别身份→跳转首页 -->
+        <mxCell id="e16" edge="1" parent="1" source="s_log_ok" target="s_jump" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- 跳转首页→进入首页（水平跨泳道） -->
+        <mxCell id="e17" edge="1" parent="1" source="s_jump" target="u_home" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="1370" />
+              <mxPoint x="405" y="1420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- 进入首页→结束 -->
+        <mxCell id="e18" edge="1" parent="1" source="u_home" target="u_end_outer" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

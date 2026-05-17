@@ -45,3 +45,6 @@ Thumbs.db
 *.swo
 # drawio auto-saved backup files
 **/.$*.bkp
+
+# PlantUML output
+out/
