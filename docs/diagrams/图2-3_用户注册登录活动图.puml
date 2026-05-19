@@ -1,43 +1,62 @@
 @startuml 图2-3_用户注册登录活动图
+
+skinparam dpi 220
+skinparam shadowing false
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 15
+skinparam activityFontSize 15
+skinparam activityDiamondFontSize 15
+skinparam activityStartColor #333333
+skinparam activityEndColor #333333
+skinparam activityBorderColor #333333
+skinparam activityBackgroundColor #F8FBFF
+skinparam partitionBorderColor #333333
+skinparam partitionBackgroundColor #FFFFFF
+skinparam arrowColor #333333
+
+title 用户注册登录活动图
+
 |用户|
 start
-:访问登录或注册页面;
+:进入系统入口;
 
 if (已有账号？) then (是)
-  |用户|
-  :输入账号与密码;
+  :输入账号和密码;
+
   |系统|
-  :核对账号与密码;
-  if (正确？) then (是)
-    :签发令牌，识别用户身份;
+  :校验账号密码;
+
+  if (校验通过？) then (是)
+    :生成访问令牌;
+    :返回用户信息;
   else (否)
     :提示账号或密码错误;
     |用户|
-    :重新输入账号与密码;
-    |系统|
-    :核对账号与密码;
-    note right: 循环直到正确或放弃
+    :重新输入或退出;
+    stop
   endif
+
 else (否)
-  |用户|
-  :填写用户名、邮箱与密码;
+  :填写用户名、邮箱和密码;
+  :提交注册信息;
+
   |系统|
-  :校验信息合法性与账号是否被占用;
-  if (可注册？) then (是)
-    :创建账号并自动登录;
+  :校验注册信息;
+
+  if (信息可用？) then (是)
+    :创建用户账号;
+    :生成访问令牌;
+    :返回用户信息;
   else (否)
-    :提示账号已存在或信息无效;
+    :提示信息无效或账号已存在;
     |用户|
-    :重新填写注册信息;
-    |系统|
-    :校验信息合法性与账号是否被占用;
-    note right: 循环直到通过或放弃
+    :重新填写或退出;
+    stop
   endif
 endif
 
-|系统|
-:跳转至首页;
 |用户|
+:保存登录状态;
 :进入系统首页;
 
 stop

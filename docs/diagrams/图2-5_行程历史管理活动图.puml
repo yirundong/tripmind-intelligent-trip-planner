@@ -1,43 +1,65 @@
 @startuml 图2-5_行程历史管理活动图
+
+skinparam dpi 220
+skinparam shadowing false
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 15
+skinparam activityFontSize 15
+skinparam activityDiamondFontSize 15
+skinparam activityStartColor #333333
+skinparam activityEndColor #333333
+skinparam activityBorderColor #333333
+skinparam activityBackgroundColor #F8FBFF
+skinparam partitionBorderColor #333333
+skinparam partitionBackgroundColor #FFFFFF
+skinparam arrowColor #333333
+
+title 行程历史管理活动图
+
 |用户|
 start
 :进入历史行程页面;
 
 |系统|
-:识别用户身份;
+:校验用户身份;
 
 if (身份有效？) then (否)
-  :提示重新登录;
+  :返回登录提示;
   |用户|
+  :跳转登录页面;
   stop
 else (是)
 endif
 
 |系统|
-:按时间倒序返回历史行程列表;
+:查询历史行程;
+:返回行程列表;
 
 |用户|
-:浏览历史行程列表;
+:浏览行程列表;
 
-if (选择操作) then (查看详情)
-  :点击查看某条行程;
+if (选择操作？) then (查看)
+  :选择查看详情;
   |系统|
-  :展示该条行程的详细安排;
+  :读取行程详情;
   |用户|
-  :查看行程详细安排;
+  :查看完整行程;
   stop
+
 else (删除)
-  :点击删除按钮;
-  |系统|
-  :弹出删除确认对话框;
-  |用户|
+  :选择删除行程;
+  :确认删除操作;
+
   if (确认删除？) then (是)
     |系统|
-    :删除该条行程并刷新列表;
+    :校验行程归属;
+    :删除行程记录;
+    :刷新行程列表;
     |用户|
+    :查看更新列表;
     stop
   else (否)
-    :返回历史行程列表;
+    :返回行程列表;
     stop
   endif
 endif
